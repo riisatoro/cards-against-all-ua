@@ -8,8 +8,10 @@ authors = ["riisatoro <riisa.toro@gmail.com>"]
 python = "^3.8"
 fastapi = "^0.75.2"
 uvicorn = "^0.17.6"
+pymongo = "^4.1.1"
 
 [tool.poetry.dev-dependencies]
+ipython = "^8.3.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
