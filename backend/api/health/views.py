@@ -7,6 +7,6 @@ router = APIRouter(
     tags=['Health check']
 )
 
-@router.get('/health')
+@router.get('/health', response_model=CommonResponse)
 def health_check() -> CommonResponse:
-    return CommonResponse
+    return CommonResponse(detail='ok')

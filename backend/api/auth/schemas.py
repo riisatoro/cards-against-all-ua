@@ -1,8 +1,7 @@
-from lib2to3.pytree import Base
 from pydantic import BaseModel
 
 
-class CommonResponse(Base):
+class CommonResponse(BaseModel):
     detail: str
 
 
