@@ -2,6 +2,7 @@ from pydantic import BaseModel, validator
 
 from validators.validators import (
     is_alphanumeric,
+    is_email_valid,
     is_password_length_valid,
     is_passwords_matched,
     is_username_length_valid,
@@ -18,6 +19,7 @@ class User(BaseModel):
 
     _alphanumeric_username = validator('username', allow_reuse=True)(is_alphanumeric)
     _lenth_username = validator('username', allow_reuse=True)(is_username_length_valid)
+    _valid_email = validator('email', allow_reuse=True)(is_email_valid)
 
 
 class UserInDB(User):

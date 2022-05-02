@@ -1,3 +1,6 @@
+from email_validator import validate_email
+
+
 def is_alphanumeric(v):
     if not v.isalnum():
         raise ValueError('Value should be numeric')
@@ -15,3 +18,6 @@ def is_passwords_matched(v, values):
     if values.get('password') != v:
         raise ValueError('Passwords don\'t match')
     return v
+
+def is_email_valid(v):
+    return validate_email(v).email
