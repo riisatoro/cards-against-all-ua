@@ -10,3 +10,8 @@ def is_username_length_valid(v):
 def is_password_length_valid(v):
     if len(v) < 8:
         raise ValueError('Password should contain at least 8 symbols')
+
+def is_passwords_matched(v, values):
+    if values.get('password') != v:
+        raise ValueError('Passwords don\'t match')
+    return v

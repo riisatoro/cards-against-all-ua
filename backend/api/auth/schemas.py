@@ -3,6 +3,7 @@ from pydantic import BaseModel, validator
 from validators.validators import (
     is_alphanumeric,
     is_password_length_valid,
+    is_passwords_matched,
     is_username_length_valid,
 )
 
@@ -28,9 +29,4 @@ class NewUser(User):
     repeat_password: str
 
     _lenth_password = validator('password', allow_reuse=True)(is_password_length_valid)
-
-    @validator('repeat_password')
-    def repeat_password_valid(cls, v):
-        if cls.password != v:
-            raise ValueError('Passwords don\'t match')
-        return v
+    _matched_password = validator('repeat_password', allow_reuse=True)(is_passwords_matched)
