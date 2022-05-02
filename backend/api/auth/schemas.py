@@ -15,8 +15,8 @@ class User(BaseModel):
     username: str
     email: str
 
-    _alphanumeric_username = validator('name', allow_reuse=True)(is_alphanumeric)
-    _lenth_username = validator('name', allow_reuse=True)(is_username_length_valid)
+    _alphanumeric_username = validator('username', allow_reuse=True)(is_alphanumeric)
+    _lenth_username = validator('username', allow_reuse=True)(is_username_length_valid)
 
 
 class UserInDB(User):
