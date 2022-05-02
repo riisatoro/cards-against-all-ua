@@ -1,16 +1,16 @@
 from fastapi import APIRouter, HTTPException, status
 
-from api.auth.schemas import CommonResponse
+from api.auth.schemas import CommonResponse, NewUser
 
 
 router = APIRouter(
     prefix='/auth',
-    tags=['Authentication and authorization']
+    tags=['Authentication and authorization'],
 )
 
-@router.post('/register')
-def register(username: str, email: str, password: str, repeat_password: str) -> CommonResponse:
-    if password != repeat_password:
+@router.post('/register', response_model=CommonResponse)
+def register(new_user: NewUser):
+    if NewUser.password != NewUser.repeat_password:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail='Passwords don\'t match'
