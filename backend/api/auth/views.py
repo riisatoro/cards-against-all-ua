@@ -1,7 +1,11 @@
-from tkinter import NE
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter
+from typing import List
 
-from api.auth.schemas import CommonResponse, NewUser
+from api.auth.schemas import (
+    CommonResponseSchema,
+    NewUserSchema,
+    UserInDBSchema,
+)
 
 
 router = APIRouter(
@@ -9,9 +13,10 @@ router = APIRouter(
     tags=['Authentication and authorization'],
 )
 
-@router.post('/register', response_model=CommonResponse)
-def register(new_user: NewUser):
-    return CommonResponse(detail='User have been created successfully')
+@router.post('/register', response_model=CommonResponseSchema)
+def register(new_user: NewUserSchema):
+    user = UserInDBSchema(**new_user.dict())
+    return CommonResponseSchema(detail='User have been created successfully')
 
 @router.post('/login')
 def login() -> str:

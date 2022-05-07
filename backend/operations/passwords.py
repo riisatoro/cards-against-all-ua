@@ -10,7 +10,6 @@ def hash_password(v):
     Hash the provided password with a pepper salt and return the
     hash to store in the database.
     """
-    import ipdb; ipdb.set_trace()
     pepper = os.getenv('SECRET_KEY')
     if not pepper:
         raise ValueError('SECRET_KEY is required')
