@@ -9,10 +9,12 @@ def is_alphanumeric(v):
 def is_username_length_valid(v):
     if 20 < len(v) < 3:
         raise ValueError('Username should be from 3 to 20 characters long')
+    return v
 
 def is_password_length_valid(v):
     if len(v) < 8:
         raise ValueError('Password should contain at least 8 symbols')
+    return v
 
 def is_passwords_matched(v, values):
     if values.get('password') != v:

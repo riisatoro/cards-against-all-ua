@@ -1,5 +1,6 @@
 from pydantic import BaseModel, validator
 
+from operations.passwords import hash_password
 from validators.validators import (
     is_alphanumeric,
     is_email_valid,
@@ -24,6 +25,9 @@ class User(BaseModel):
 
 class UserInDB(User):
     password: str
+
+    _lenth_password = validator('password', allow_reuse=True)(is_password_length_valid)
+    _hash_password = validator('password', allow_reuse=True)(hash_password)
 
 
 class NewUser(User):

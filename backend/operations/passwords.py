@@ -5,15 +5,16 @@ import os
 from typing import Tuple
 
 
-def hash_password(password: str) -> Tuple[bytes, bytes]:
+def hash_password(v):
     """
     Hash the provided password with a pepper salt and return the
     hash to store in the database.
     """
+    import ipdb; ipdb.set_trace()
     pepper = os.getenv('SECRET_KEY')
     if not pepper:
         raise ValueError('SECRET_KEY is required')
-    pw_hash = hashlib.pbkdf2_hmac('sha256', password.encode(), pepper.encode(), 100000)
+    pw_hash = hashlib.pbkdf2_hmac('sha256', v.encode(), pepper.encode(), 100000)
     return pw_hash
 
 
