@@ -41,11 +41,18 @@ class UserLoginSchema(BaseModel):
 class AccessTokenSchema(BaseModel):
     access: str
 
+    _access_str = validator('access', allow_reuse=True)(lambda v: str(v))
+
 
 class RefreshTokenSchema(BaseModel):
     refresh: str
+
+    _refresh_str = validator('refresh', allow_reuse=True)(lambda v: str(v))
 
 
 class AccessRefreshTokenSchema(BaseModel):
     access: str
     refresh: str
+
+    _access_str = validator('access', allow_reuse=True)(lambda v: str(v))
+    _refresh_str = validator('refresh', allow_reuse=True)(lambda v: str(v))

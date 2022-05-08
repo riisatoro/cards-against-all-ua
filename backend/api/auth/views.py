@@ -1,3 +1,4 @@
+from bson import encode
 from fastapi import APIRouter, HTTPException
 from typing import List
 
@@ -5,6 +6,7 @@ from api.auth.schemas import (
     CommonResponseSchema,
     NewUserSchema,
     AccessRefreshTokenSchema,
+    RefreshTokenSchema,
     UserLoginSchema,
 )
 
@@ -13,10 +15,12 @@ from database.models import UserModel, UserTokenModel
 from database.queries import (
     find_in_db,
     insert_to_db,
+    update_in_db,
     update_or_create_in_db,
 )
 from security.tokens import (
     create_refresh,
+    decode_jwt,
     encode_jwt,
 )
 
@@ -41,10 +45,18 @@ def login(user_login: UserLoginSchema):
         raise HTTPException(status_code=404, detail='Invalid credentials')
 
     refresh_token = create_refresh()
-    update_or_create_in_db(UserToken, {'user_id': existed_user['_id']}, {'token': refresh_token})
+    update_or_create_in_db(UserToken, {'_id': existed_user['_id']}, {'refresh': refresh_token})
     return AccessRefreshTokenSchema(access=encode_jwt(existed_user), refresh=refresh_token)
 
 
 @router.post('/refresh', response_model=AccessRefreshTokenSchema)
-def refresh():
-    return AccessRefreshTokenSchema(access='ok', refresh='ok')
+def refresh(token: RefreshTokenSchema):
+    user_token = find_in_db(UserToken, token)
+    print(user_token)
+    if not user_token or not decode_jwt(user_token['refresh']):
+        raise HTTPException(status_code=403, detail='Invalid credentials')
+
+    user = find_in_db(User, {'_id': user_token["_id"]})
+    refresh_token = create_refresh()
+    update_in_db(UserToken, {'_id': user['_id']},{'refresh': refresh_token})
+    return AccessRefreshTokenSchema(access=encode_jwt(user), refresh=refresh_token)

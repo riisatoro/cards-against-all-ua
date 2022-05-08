@@ -12,6 +12,7 @@ def insert_to_db(model, values):
 
 def find_in_db(model, values):
     values = dict(values)
+    print(values)
     return model.find_one(values)
 
 

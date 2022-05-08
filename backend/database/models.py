@@ -6,7 +6,6 @@ from security.passwords import hash_password
 from validators.validators import is_password_length_valid
 
 
-
 class UserModel(UserSchema):
     password: str
 
@@ -15,5 +14,7 @@ class UserModel(UserSchema):
 
 
 class UserTokenModel(BaseModel):
-    user_id: Any
+    _id: int
     refresh: str
+
+    _refresh_str = validator('refresh', allow_reuse=True)(lambda v: str(v))
