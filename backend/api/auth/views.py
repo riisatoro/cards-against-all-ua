@@ -7,6 +7,9 @@ from api.auth.schemas import (
     UserInDBSchema,
 )
 
+from database.collections import User
+from database.queries import insert_to_db
+
 
 router = APIRouter(
     prefix='/auth',
@@ -16,6 +19,7 @@ router = APIRouter(
 @router.post('/register', response_model=CommonResponseSchema)
 def register(new_user: NewUserSchema):
     user = UserInDBSchema(**new_user.dict())
+    insert_to_db(User, user)
     return CommonResponseSchema(detail='User have been created successfully')
 
 @router.post('/login')
