@@ -36,3 +36,23 @@ class NewUserSchema(UserSchema):
 
     _lenth_password = validator('password', allow_reuse=True)(is_password_length_valid)
     _matched_password = validator('repeat_password', allow_reuse=True)(is_passwords_matched)
+
+
+class UserLoginSchema(BaseModel):
+    email: str
+    password: str
+
+    _hash_password = validator('password', allow_reuse=True)(hash_password)
+
+
+class AccessTokenSchema(BaseModel):
+    access: str
+
+
+class RefreshTokenSchema(BaseModel):
+    refresh: str
+
+
+class AccessRefreshTokenSchema(BaseModel):
+    access: str
+    refresh: str
