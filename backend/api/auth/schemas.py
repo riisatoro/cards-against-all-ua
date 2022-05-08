@@ -23,13 +23,6 @@ class UserSchema(BaseModel):
     _valid_email = validator('email', allow_reuse=True)(is_email_valid)
 
 
-class UserInDBSchema(UserSchema):
-    password: str
-
-    _lenth_password = validator('password', allow_reuse=True)(is_password_length_valid)
-    _hash_password = validator('password', allow_reuse=True)(hash_password)
-
-
 class NewUserSchema(UserSchema):
     password: str
     repeat_password: str

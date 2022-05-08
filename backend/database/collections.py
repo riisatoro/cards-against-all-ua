@@ -9,4 +9,4 @@ User = db['user']
 User.create_index([('email', pymongo.ASCENDING)], unique=True)
 User.create_index([('username', pymongo.ASCENDING)], unique=True)
 
-RefreshToken = db['refresh']
+UserToken = db['usertoken']
