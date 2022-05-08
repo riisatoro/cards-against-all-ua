@@ -34,6 +34,7 @@ def login(user_login: UserLoginSchema):
     existed_user = find_in_db(User, user_login)
     if not existed_user:
         raise HTTPException(status_code=404, detail='Invalid credentials')
+    
     return AccessRefreshTokenSchema(access='ok', refresh='ok')
 
 

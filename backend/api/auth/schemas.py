@@ -1,6 +1,6 @@
 from pydantic import BaseModel, validator
 
-from operations.passwords import hash_password
+from security.passwords import hash_password
 from validators.validators import (
     is_alphanumeric,
     is_email_valid,
