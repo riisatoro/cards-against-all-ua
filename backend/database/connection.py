@@ -1,15 +1,21 @@
-# import os
+from os import getenv
 
-# from pymongo.mongo_client import MongoClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 
-# __mongo_uri = 'mongodb://{}:{}@{}:{}'.format(
-#     os.getenv('MONGO_INITDB_ROOT_USERNAME'),
-#     os.getenv('MONGO_INITDB_ROOT_PASSWORD'),
-#     os.getenv('MONGO_DATABASE_HOST'),
-#     os.getenv('MONGO_DATABASE_PORT'),
-# )
+__db_url = getenv('DATABASE_URL')
 
-# __db_cluster = MongoClient(__mongo_uri)
+if not __db_url:
+    __db_url = f'postgresql://{0}:{1}@{2}:{3}/{4}'
+    __db_url.format(
+        getenv('POSTGRES_USER'),
+        getenv('POSTGRES_PASSWORD'),
+        getenv('POSTGRES_HOST'),
+        getenv('POSTGRES_PORT'),
+        getenv('POSTGRES_DB'),
+    )
 
-# db = __db_cluster[os.getenv('MONGO_DATABASE_NAME')]
+engine = create_engine(__db_url)
+
+session = sessionmaker(engine)()
