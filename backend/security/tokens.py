@@ -5,7 +5,7 @@ import pytz
 
 from dateutil.relativedelta import relativedelta
 
-from database.collections import User
+# from database.collections import User
 
 
 ALGORITHM = 'HS256'

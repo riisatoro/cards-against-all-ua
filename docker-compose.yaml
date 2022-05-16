@@ -7,20 +7,18 @@ services:
     volumes:
       - ./backend/:/app/
     depends_on:
-      - mongo
-    command: 'poetry run python main.py'
+      - db
     env_file:
       - .env
     ports:
-      - '8000:8000'
+      - $PORT:$PORT
 
-  mongo:
-    image: mongo
+  db:
+    image: postgres
     container_name: cards-db
-    restart: always
     volumes:
-      - ./data/mongodb/:/data/db/
+      - ./data/:/var/lib/postgresql
     env_file:
       - .env
     ports:
-      - '27017:27017'
+      - $POSTGRES_PORT:$POSTGRES_PORT
