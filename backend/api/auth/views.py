@@ -7,17 +7,11 @@ from api.auth.schemas import (
     NewUserSchema,
     AccessRefreshTokenSchema,
     RefreshTokenSchema,
+    UserInDbSchema,
     UserLoginSchema,
 )
-
-# from database.collections import User, UserToken
-# from database.models import UserModel, UserTokenModel
-# from database.queries import (
-#     find_in_db,
-#     insert_to_db,
-#     update_in_db,
-#     update_or_create_in_db,
-# )
+from database.models import UserModel
+from database.queries import save_model
 from security.tokens import (
     create_refresh,
     decode_jwt,
@@ -33,10 +27,16 @@ router = APIRouter(
 
 @router.post('/register', response_model=CommonResponseSchema)
 def register(new_user: NewUserSchema):
-    # user = UserModel(**new_user.dict())
-    # insert_to_db(User, user)
-    # return CommonResponseSchema(detail='User have been created successfully')
-    return 'ok'
+    user = UserInDbSchema(**new_user.dict())
+
+    user = UserModel(**user.dict())
+
+    try:
+        save_model(user)
+    except:
+        raise HTTPException(status_code=404, detail='Username or email already exists.')
+
+    return CommonResponseSchema(detail='User have been created successfully')
 
 
 @router.post('/login', response_model=AccessRefreshTokenSchema)
