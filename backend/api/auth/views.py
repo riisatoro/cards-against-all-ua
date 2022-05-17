@@ -11,7 +11,10 @@ from api.auth.schemas import (
     UserLoginSchema,
 )
 from database.models import UserModel
-from database.queries import save_model
+from database.queries import (
+    save_model,
+    select_single_object,
+)
 from security.tokens import (
     create_refresh,
     decode_jwt,
@@ -41,6 +44,8 @@ def register(new_user: NewUserSchema):
 
 @router.post('/login', response_model=AccessRefreshTokenSchema)
 def login(user_login: UserLoginSchema):
+    user = select_single_object(UserModel, **user_login.dict())
+    print(user)
     # existed_user = find_in_db(User, user_login)
     # if not existed_user:
     #     raise HTTPException(status_code=404, detail='Invalid credentials')

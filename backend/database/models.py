@@ -4,6 +4,7 @@ from uuid import uuid4
 from sqlalchemy import (
     Column,
     DateTime,
+    LargeBinary,
     String,
 )
 from sqlalchemy.ext.declarative import declared_attr, declarative_base
@@ -25,7 +26,7 @@ Model = declarative_base(cls=__Base)
 class UserModel(Model):
     username = Column(String(150), nullable=False, unique=True)
     email = Column(String(255), nullable=False, unique=True)
-    password = Column(String, nullable=False)
+    password = Column(LargeBinary, nullable=False)
 
 
 class UserTokenModel(Model):
