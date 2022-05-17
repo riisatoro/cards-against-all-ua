@@ -2,8 +2,6 @@ import hashlib
 import hmac
 import os
 
-from typing import Tuple
-
 
 def hash_password(v):
     """

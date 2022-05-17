@@ -1,11 +1,9 @@
-from datetime import date, datetime
+from datetime import datetime
 import jwt
 import os
 import pytz
 
 from dateutil.relativedelta import relativedelta
-
-# from database.collections import User
 
 
 ALGORITHM = 'HS256'
@@ -14,10 +12,10 @@ JWT_ACCESS_EXPIRES_AT = int(os.getenv('JWT_ACCESS_EXPIRES_AT'))
 JWT_REFRESH_EXPIRES_AT = int(os.getenv('JWT_ACCESS_EXPIRES_AT'))
 
 
-def encode_jwt(user: dict):
+def encode_jwt(email: str):
     data = {
         'exp': datetime.now(tz=pytz.UTC) + relativedelta(seconds=JWT_ACCESS_EXPIRES_AT),
-        'user': user['email'],
+        'email': email,
     }
     return jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 

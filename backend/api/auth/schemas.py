@@ -1,6 +1,5 @@
 from pydantic import BaseModel, validator
 
-from security.passwords import hash_password
 from validators.validators import (
     is_alphanumeric,
     is_email_valid,
@@ -38,8 +37,6 @@ class NewUserSchema(UserInDbSchema):
 class UserLoginSchema(BaseModel):
     email: str
     password: str
-
-    _hash_password = validator('password', allow_reuse=True)(hash_password)
 
 
 class AccessTokenSchema(BaseModel):

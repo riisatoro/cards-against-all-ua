@@ -4,10 +4,12 @@ from uuid import uuid4
 from sqlalchemy import (
     Column,
     DateTime,
+    ForeignKey,
     LargeBinary,
     String,
 )
 from sqlalchemy.ext.declarative import declared_attr, declarative_base
+from sqlalchemy.orm import relationship
 
 
 class __Base(object):
@@ -28,6 +30,11 @@ class UserModel(Model):
     email = Column(String(255), nullable=False, unique=True)
     password = Column(LargeBinary, nullable=False)
 
+    refresh = relationship('UserTokenModel', back_populates='user')
+
 
 class UserTokenModel(Model):
+    id = Column(String, ForeignKey('usermodel.id'), primary_key=True)
     refresh = Column(String, nullable=False)
+
+    user = relationship('UserModel', back_populates='refresh')
