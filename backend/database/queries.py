@@ -3,6 +3,7 @@ from sqlalchemy import select
 from database.connection import session
 from database.models import UserModel
 from security.passwords import hash_password
+from security.tokens import decode_jwt
 
 
 def __prepare_user_model(model):
@@ -38,3 +39,8 @@ def select_single_object(model, **kwargs):
         raise ValueError('Found multiple objects for this query')
 
     return results[0][0]
+
+
+def get_user(access):
+    user_data = decode_jwt(access)
+    return select_single_object(UserModel, email=user_data['email'])

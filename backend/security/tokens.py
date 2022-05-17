@@ -4,6 +4,7 @@ import os
 import pytz
 
 from dateutil.relativedelta import relativedelta
+from fastapi import HTTPException
 
 
 ALGORITHM = 'HS256'
@@ -31,4 +32,4 @@ def decode_jwt(token: str):
     try:
         return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
     except jwt.ExpiredSignatureError:
-        return None
+        raise HTTPException(status_code=403, detail="Unauthorized")

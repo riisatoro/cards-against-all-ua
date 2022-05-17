@@ -1,14 +1,17 @@
-from typing import Optional
 from fastapi import APIRouter, Header
 
-from api.auth.decorators import login_required
+from database.queries import get_user
+
 
 router = APIRouter(
     prefix='/game',
     tags=['Game actions']
 )
 
+
 @router.get('/room')
-@login_required
-def get_all_rooms(*args, **kwargs):
+def get_all_rooms(
+    access: str = Header(default=None)
+):
+    user = get_user(access)
     return []
