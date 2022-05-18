@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Header
+from fastapi import APIRouter, Depends
 
-from database.queries import get_user
+from api.auth.dependencies import authenticate_user
+from database.models import UserModel
 
 
 router = APIRouter(
@@ -10,8 +11,5 @@ router = APIRouter(
 
 
 @router.get('/room')
-def get_all_rooms(
-    access: str = Header(default=None)
-):
-    user = get_user(access)
+def get_all_rooms(user: UserModel = Depends(authenticate_user)):
     return []
