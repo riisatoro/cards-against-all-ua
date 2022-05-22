@@ -19,7 +19,8 @@ def save_model(model):
         session.add(model)
         session.commit()
         return model
-    except:
+    except Exception as e:
+        print('\n', e, '\n')
         session.rollback()
         return None
 

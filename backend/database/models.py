@@ -37,7 +37,7 @@ class UserModel(Model):
     email = Column(String(255), nullable=False, unique=True)
     password = Column(LargeBinary, nullable=False)
 
-    refresh = relationship('UserTokenModel', backref='user  ')
+    refresh = relationship('UserTokenModel', back_populates='user')
 
 
 class UserTokenModel(Model):

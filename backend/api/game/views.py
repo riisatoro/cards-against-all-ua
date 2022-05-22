@@ -37,7 +37,7 @@ def create_room(
     user_room = select_single_object(UserRoomModel, user_id=user.id)
     if user_room:
         raise HTTPException(status=422, detail='You already in game')
-    
+
     room = RoomModel(
         is_private=is_private,
         round_end_time=datetime.now() + relativedelta(seconds=settings.ROOM_WAIT_TIME)
