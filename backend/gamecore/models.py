@@ -58,5 +58,5 @@ class UserRoomModel(Model):
     user = ForeignKey(to=User, on_delete=CASCADE)
 
     score = PositiveIntegerField(default=0)
-    answer = ForeignKey(to='CardModel', on_delete=CASCADE, related_name='answer')
+    answer = ForeignKey(to='CardModel', on_delete=CASCADE, related_name='answer', null=True)
     cards = ManyToManyField(to='CardModel', related_name='cards')

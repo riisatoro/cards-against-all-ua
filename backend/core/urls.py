@@ -12,6 +12,7 @@ documentation_urls = [
 api_urls = [
     path('token/', include('authentication.urls')),
     path('user/', include('users.urls')),
+    path('game/', include('gamecore.urls')),
 ]
 
 
