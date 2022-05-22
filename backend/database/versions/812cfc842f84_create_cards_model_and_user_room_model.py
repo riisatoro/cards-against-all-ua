@@ -1,8 +1,8 @@
-"""Create models for game rooms and cards
+"""Create cards model and user room model
 
-Revision ID: ac2ba6af95bf
+Revision ID: 812cfc842f84
 Revises: f78691864013
-Create Date: 2022-05-18 14:09:55.372285
+Create Date: 2022-05-19 13:23:03.185933
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ac2ba6af95bf'
+revision = '812cfc842f84'
 down_revision = 'f78691864013'
 branch_labels = None
 depends_on = None
@@ -32,14 +32,15 @@ def upgrade():
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('is_started', sa.Boolean(), nullable=True),
     sa.Column('is_ended', sa.Boolean(), nullable=True),
+    sa.Column('is_private', sa.Boolean(), nullable=True),
     sa.Column('round_number', sa.Integer(), nullable=True),
     sa.Column('round_end_time', sa.DateTime(), nullable=False),
-    sa.Column('leader', sa.String(), nullable=True),
-    sa.Column('question_card', sa.String(), nullable=True),
-    sa.Column('funny_card', sa.String(), nullable=True),
-    sa.ForeignKeyConstraint(['funny_card'], ['cardsmodel.id'], ),
-    sa.ForeignKeyConstraint(['leader'], ['usermodel.id'], ),
-    sa.ForeignKeyConstraint(['question_card'], ['cardsmodel.id'], ),
+    sa.Column('leader_id', sa.String(), nullable=True),
+    sa.Column('question_card_id', sa.String(), nullable=True),
+    sa.Column('funny_card_id', sa.String(), nullable=True),
+    sa.ForeignKeyConstraint(['funny_card_id'], ['cardsmodel.id'], ),
+    sa.ForeignKeyConstraint(['leader_id'], ['usermodel.id'], ),
+    sa.ForeignKeyConstraint(['question_card_id'], ['cardsmodel.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('userroommodel',

@@ -1,5 +1,6 @@
 from datetime import datetime
-from enums import CardsEnum
+from email.policy import default
+from database.enums import CardsEnum
 from uuid import uuid4
 
 from sqlalchemy import (
@@ -36,7 +37,7 @@ class UserModel(Model):
     email = Column(String(255), nullable=False, unique=True)
     password = Column(LargeBinary, nullable=False)
 
-    refresh = relationship('UserTokenModel', back_populates='user')
+    refresh = relationship('UserTokenModel', backref='user  ')
 
 
 class UserTokenModel(Model):
@@ -55,12 +56,18 @@ class RoomModel(Model):
     is_started = Column(Boolean, default=False)
     is_ended = Column(Boolean, default=False)
 
+    is_private = Column(Boolean, default=False)
     round_number = Column(Integer, default=0)
     round_end_time = Column(DateTime, nullable=False)
 
-    leader = Column(String, ForeignKey('usermodel.id'), nullable=True)
-    question_card = Column(String, ForeignKey('cardsmodel.id'), nullable=True)
-    funny_card = Column(String, ForeignKey('cardsmodel.id'), nullable=True)
+    leader_id = Column(String, ForeignKey('usermodel.id'), nullable=True)
+    # leader = relationship('UserModel', foreign_keys='RoomModel.leader_id')
+
+    question_card_id = Column(String, ForeignKey('cardsmodel.id'), nullable=True)
+    # question_card = relationship('CardsModel', foreign_keys='RoomModel.question_card_id')
+
+    funny_card_id = Column(String, ForeignKey('cardsmodel.id'), nullable=True)
+    # funny_card = relationship('CardsModel', foreign_keys='RoomModel.funny_card_id')
 
 
 class UserRoomModel(Model):
@@ -69,7 +76,10 @@ class UserRoomModel(Model):
     )
 
     user_id = Column(String, ForeignKey('usermodel.id'), nullable=True)
+    # user = relationship('UserModel', back_populates='user_room')
+
     room_id = Column(String, ForeignKey('roommodel.id'), nullable=True)
+    # room = relationship('RoomModel', back_populates='user_rooms')
 
     user_score = Column(Integer, default=0)
     answer_card = Column(String, ForeignKey('cardsmodel.id'))
