@@ -1,7 +1,8 @@
+from django.contrib.auth.hashers import make_password
 from rest_framework.generics import CreateAPIView
 
 from authentication.models import User
-from users.serializers import CreateUserSerializer
+from users.serializers import CreateUserSerializer, SaveUserSerializer
 
 
 class CreateUserView(CreateAPIView):
@@ -9,6 +10,11 @@ class CreateUserView(CreateAPIView):
     authentication_classes = []
 
     def perform_create(self, serializer):
-        data = serializer.data
-        data.pop('repeat_password', '')
-        User.objects.create(**data, is_active=True)
+        user = SaveUserSerializer(
+            data={
+                **serializer.data,
+                'password': make_password(serializer.data['password'])
+            }
+        )
+        if user.is_valid():
+            user.save()

@@ -15,3 +15,9 @@ class CreateUserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email', 'password', 'repeat_password',)
+
+
+class SaveUserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password',)
