@@ -1,8 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-
-from authentication.urls import urlpatterns as authentication_urls
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 
 documentation_urls = [ 
@@ -12,7 +10,8 @@ documentation_urls = [
 
 
 api_urls = [
-    path('token/', include(authentication_urls)),
+    path('token/', include('authentication.urls')),
+    path('user/', include('users.urls')),
 ]
 
 

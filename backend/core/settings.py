@@ -6,6 +6,7 @@ Using Django 4.0.4.
 from os import getenv
 from pathlib import Path
 
+from datetime import timedelta
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,6 +40,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
 
     'authentication',
+    'gamecore',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -142,9 +145,19 @@ REST_FRAMEWORK = {
     )
 }
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=60 * 60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(seconds=60 * 60 * 24),
+}
+
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Your Project API',
     'DESCRIPTION': 'Your project description',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
+
+# Game settings
+
+ROOM_WAIT_TIME: int = 120
+MINIMAL_ROOM_PLAYERS: int = 3
