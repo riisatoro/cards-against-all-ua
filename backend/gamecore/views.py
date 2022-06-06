@@ -10,6 +10,7 @@ from gamecore.models import RoomModel
 from gamecore.serializers import (
     DefaultResponseSerializer,
     CreateRoomSerializer,
+    RoomSerializer,
 )
 
 
@@ -23,9 +24,14 @@ def get_user_room(user):
 
 
 def join_user_to_room(user, uuid=None):
-    filters = {'is_ended': False, 'user_amount__lt': settings.MAX_ROOM_PLAYER}
+    filters = {
+        'is_ended': False,
+        'user_amount__lt': settings.MAX_ROOM_PLAYER
+    }
     if uuid:
         filters['id'] = uuid
+    else:
+        filters['is_private'] = False
     
     available_rooms = RoomModel.objects.annotate(users_amount=Count('users')).filter(**filters)
     if not available_rooms.exists():
@@ -43,7 +49,7 @@ class UserCreateRoomView(APIView):
     @extend_schema(
         request=CreateRoomSerializer,
         responses={
-            201: DefaultResponseSerializer,
+            201: RoomSerializer,
             401: DefaultResponseSerializer,
             422: DefaultResponseSerializer,
         }
@@ -52,25 +58,15 @@ class UserCreateRoomView(APIView):
         user_in_room = get_user_room(user=request.user)
         
         if user_in_room.exists():
-            return Response(
-                {'detail': 'You already in game'},
-                status=422,
-            )
+            return Response({'detail': 'You already in game'}, status=422)
 
         room = CreateRoomSerializer(data=request.POST)
         if not room.is_valid():
-            return Response(
-                {'detail': 'Got invalid data for game room'},
-                status=422,
-            )
+            return Response({'detail': 'Got invalid data for game room'}, status=422)
 
         room = room.save()
         room.users.add(self.request.user)
-
-        return Response(
-            {'detail': 'New room created successfully'},
-            status=201,
-        )
+        return Response(RoomSerializer(room).data, status=201)
 
 
 @extend_schema(tags=[VIEW_TAG])
