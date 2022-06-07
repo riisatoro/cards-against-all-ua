@@ -38,7 +38,7 @@ def join_user_to_room(user, uuid=None):
 
     room = choice(available_rooms)
     room.users.add(user)
-    return True
+    return room, True
 
 
 @extend_schema(tags=[VIEW_TAG])
@@ -88,14 +88,14 @@ class UserJoinRoomView(APIView):
         if user_room:
             return Response({'detail': 'You already in game'}, status=422)
 
-        is_joined = join_user_to_room(request.user, uuid=room_uuid)
+        room, is_joined = join_user_to_room(request.user, uuid=room_uuid)
         if not is_joined:
             return Response(
                 {'detail': 'Can\t join to room. Either no available rooms left, or you got wrong invitation link.'},
                 status=422,
             )
 
-        return Response(RoomSerializer(user_room).data, status=200)
+        return Response(RoomSerializer(room).data, status=200)
 
 
 @extend_schema(tags=[VIEW_TAG])
