@@ -11,20 +11,18 @@ from authentication.models import User
 
 class TestUserJoinRoom(TestCase):
     def setUp(self):
-        self.password = 'random-password'
-        user_data = [
-            {
-                'username': str(uuid4()),
-                'email': str(uuid4()) + '@example.com',
-                'password': make_password(self.password),
-            }
-            for _ in range(10)
-        ]
+        self.password = make_password('random-password')
 
-        self.users = [
-            User.objects.create(**data)
-            for data in user_data
-        ]
+        self.owner = User.objects.create(
+            username='owner',
+            email=str(uuid4()) + '@example.com',
+            password=self.password,
+        )
+        self.player_1 = User.objects.create(
+            username='player_1',
+            email=str(uuid4()) + '@example.com',
+            password=self.password,
+        )
 
     def __create_room(self, user, expected_status, data=None):
         return make_request(
@@ -37,23 +35,38 @@ class TestUserJoinRoom(TestCase):
 
     def __join_room(self, user, expected_status, data=None):
         return make_request(
-            url=reverse('join_random_game'),
+            url=reverse('join_game'),
             expected_status=expected_status,
             data=data,
             user=user,
             method='POST'
         )
 
+    def __assert_player_in(self, room_data, user):
+        user = filter(
+            lambda user: user.get('user', {}).get('username', None) == user.username,
+            room_data['users']
+        )
+        self.assertIsNotNone(user)
+
     def test_create_rooms(self):
-        room_data = self.__create_room(user=self.users[0], expected_status=201)
+        room_data = self.__create_room(user=self.owner, expected_status=201)
         room_id = room_data.get('id', None)
         self.assertIsNotNone(room_id)
+        self.__assert_player_in(room_data, self.owner)
 
-        room_data = self.__create_room(self.users[0], expected_status=422)
+        room_data = self.__create_room(self.owner, expected_status=422)
+        self.assertIsNone(room_data.get('id', None))
         self.assertIsNotNone(room_data.get('detail', None))
 
-    # def test_join_rooms(self):
-    #     room_data = self.__create_room(self.users[0], expected_status=201)
-    #     room_id = room_data.get('id', None)
-    #     self.assertIsNotNone(room_id)
+    def test_join_rooms(self):
+        room_data = self.__create_room(self.owner, expected_status=201)
+        room_id = room_data.get('id', None)
+        self.assertIsNotNone(room_id)
+        self.__assert_player_in(room_data, self.owner)
+    
+        room_data = self.__join_room(self.player_1, expected_status=200)
+        self.assertIsNotNone(room_data.get('id', None))
+        self.__assert_player_in(room_data, self.player_1)
 
+        self.__create_room(self.player_1, expected_status=422)
