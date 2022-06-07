@@ -1,3 +1,4 @@
+from cmath import exp
 from uuid import uuid4
 
 from django.contrib.auth.hashers import make_password
@@ -69,4 +70,10 @@ class TestUserJoinRoom(TestCase):
         self.assertIsNotNone(room_data.get('id', None))
         self.__assert_player_in(room_data, self.player_1)
 
-        self.__create_room(self.player_1, expected_status=422)
+        room_data = self.__create_room(self.player_1, expected_status=422)
+        self.assertIsNone(room_data.get('id', None))
+        self.assertIsNotNone(room_data.get('detail', None))
+
+        room_data = self.__join_room(self.player_1, expected_status=422)
+        self.assertIsNone(room_data.get('id', None))
+        self.assertIsNotNone(room_data.get('detail', None))
