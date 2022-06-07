@@ -8,8 +8,9 @@ from rest_framework.permissions import IsAuthenticated
 
 from gamecore.models import RoomModel
 from gamecore.serializers import (
-    DefaultResponseSerializer,
     CreateRoomSerializer,
+    DefaultResponseSerializer,
+    JoinRoomSerializer,
     RoomSerializer,
 )
 
@@ -24,7 +25,7 @@ def get_user_room(user):
 def join_user_to_room(user, uuid=None):
     filters = {
         'is_ended': False,
-        'user_amount__lt': settings.MAX_ROOM_PLAYER
+        'users_amount__lt': settings.MAX_ROOM_PLAYER
     }
     if uuid:
         filters['id'] = uuid
@@ -64,19 +65,28 @@ class UserCreateRoomView(APIView):
 
         room = room.save()
         room.users.add(self.request.user)
+
         return Response(RoomSerializer(room).data, status=201)
+
 
 
 @extend_schema(tags=[VIEW_TAG])
 class UserJoinRoomView(APIView):
     permission_classes = (IsAuthenticated,)
-
-    def post(self, request, room_uuid=None):
-        if get_user_room(request.user).exists():
-            return Response(
-                {'detail': 'You already in game'},
-                status=422,
-            )
+    
+    @extend_schema(
+        request=JoinRoomSerializer,
+        responses={
+            200: RoomSerializer,
+            401: DefaultResponseSerializer,
+            422: DefaultResponseSerializer,
+        }
+    )
+    def post(self, request):
+        room_uuid = JoinRoomSerializer(request.data).data.get('room_uuid', None)
+        user_room = get_user_room(request.user).first()
+        if user_room:
+            return Response({'detail': 'You already in game'}, status=422)
 
         is_joined = join_user_to_room(request.user, uuid=room_uuid)
         if not is_joined:
@@ -84,11 +94,8 @@ class UserJoinRoomView(APIView):
                 {'detail': 'Can\t join to room. Either no available rooms left, or you got wrong invitation link.'},
                 status=422,
             )
-        
-        return Response(
-            {'detail': 'You have joined the room'},
-            status=422,
-        )
+
+        return Response(RoomSerializer(user_room).data, status=200)
 
 
 @extend_schema(tags=[VIEW_TAG])

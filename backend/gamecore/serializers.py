@@ -1,9 +1,15 @@
-from ast import Mod
-from attr import fields_dict
-from rest_framework.serializers import ModelSerializer, Serializer, CharField
-from authentication.models import User
+from rest_framework.serializers import (
+    CharField,
+    ModelSerializer,
+    Serializer,
+)
 
-from gamecore.models import RoomModel, CardModel, UserRoomModel
+from authentication.models import User
+from gamecore.models import (
+    CardModel,
+    RoomModel,
+    UserRoomModel,
+)
 
 
 class DefaultResponseSerializer(Serializer):
@@ -47,6 +53,7 @@ class UserRoomSerializer(ModelSerializer):
 class RoomSerializer(ModelSerializer):
     best_answer_card = CardSerializer()
     question_card = CardSerializer()
+    leader = UserRoomSerializer()
     users = UserRoomSerializer(source='userroommodel_set', many=True)
 
     class Meta:
@@ -56,3 +63,7 @@ class RoomSerializer(ModelSerializer):
             'round_number', 'leader', 'question_card',
             'best_answer_card', 'users',
         )
+
+
+class JoinRoomSerializer(Serializer):
+    room_uuid = CharField(max_length=500, required=False)
