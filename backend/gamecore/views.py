@@ -18,9 +18,7 @@ VIEW_TAG = 'Game room'
 
 
 def get_user_room(user):
-    return RoomModel.objects.filter(
-        users__in=[user], is_ended=False
-    )
+    return RoomModel.objects.filter(users__in=[user], is_ended=False)
 
 
 def join_user_to_room(user, uuid=None):
