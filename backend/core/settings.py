@@ -5,6 +5,7 @@ Using Django 4.0.4.
 """
 from os import getenv
 from pathlib import Path
+import sys
 
 from datetime import timedelta
 import dj_database_url
@@ -78,21 +79,24 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': getenv('POSTGRES_NAME'),
+        'USER': getenv('POSTGRES_USER'),
+        'PASSWORD': getenv('POSTGRES_PASSWORD'),
+        'HOST': getenv('POSTGRES_HOST'),
+        'PORT': getenv('POSTGRES_PORT'),
+    },
+}
+
 if getenv('DATABASE_URL'):
     DATABASES = {
         'default': dj_database_url.config()
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': getenv('POSTGRES_NAME'),
-            'USER': getenv('POSTGRES_USER'),
-            'PASSWORD': getenv('POSTGRES_PASSWORD'),
-            'HOST': getenv('POSTGRES_HOST'),
-            'PORT': getenv('POSTGRES_PORT'),
-        }
-    }
+
+if 'test' in sys.argv:
+    DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
 
 
 
