@@ -48,7 +48,7 @@ class UserCreateRoomView(APIView):
     @extend_schema(
         request=CreateRoomSerializer,
         responses={
-            201: RoomSerializer,
+            200: RoomSerializer,
             401: DefaultResponseSerializer,
             422: DefaultResponseSerializer,
         }
@@ -66,7 +66,7 @@ class UserCreateRoomView(APIView):
         room = room.save()
         room.users.add(self.request.user)
 
-        return Response(RoomSerializer(room).data, status=201)
+        return Response(RoomSerializer(room).data, status=200)
 
 
 
@@ -102,21 +102,23 @@ class UserJoinRoomView(APIView):
 class UserLeaveRoomView(APIView):
     permission_classes = (IsAuthenticated,)
 
+    @extend_schema(
+        request=JoinRoomSerializer,
+        responses={
+            200: DefaultResponseSerializer,
+            401: DefaultResponseSerializer,
+            422: DefaultResponseSerializer,
+        }
+    )
     def post(self, request):
         user_room = get_user_room(user=request.user)
 
         if not user_room.exists():
-            return Response(
-                {'detail': 'You don\'t play in any room'},
-                status=422
-            )
+            return Response({'detail': 'You don\'t play in any room'}, status=422)
         
         user_room = user_room.first()
         user_room.users.remove(request.user)
         if not user_room.users.count():
             user_room.delete()
 
-        return Response(
-            {'detail': 'You have left from the room'},
-            status=201,
-        )
+        return Response({'detail': 'You have left from the room'}, status=200)
