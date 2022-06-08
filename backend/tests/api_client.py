@@ -25,5 +25,4 @@ def make_request(url, expected_status, data=None, user=None, method='GET'):
 
     error_msg  = f'response {response.status_code}, expect {expected_status}'
     assert response.status_code == expected_status, error_msg
-    
     return response.json()

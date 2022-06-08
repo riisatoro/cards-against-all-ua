@@ -42,8 +42,20 @@ def join_user_to_room(user, uuid=None):
 
 
 @extend_schema(tags=[VIEW_TAG])
-class UserCreateRoomView(APIView):
+class UserGetCreateRoomView(APIView):
     permission_classes = (IsAuthenticated,)
+    
+    @extend_schema(
+        request=CreateRoomSerializer,
+        responses={
+            200: RoomSerializer,
+            401: DefaultResponseSerializer,
+        }
+    )
+    def get(self, request):
+        user_room = get_user_room(request.user).first()
+        room = RoomSerializer(user_room).data if user_room else {}
+        return Response(room, 200)
 
     @extend_schema(
         request=CreateRoomSerializer,
