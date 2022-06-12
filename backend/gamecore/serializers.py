@@ -20,7 +20,7 @@ class DefaultResponseSerializer(Serializer):
 
 
 class UserSerializer(ModelSerializer):
-    
+
     class Meta:
         model = User
         fields = ('username',)
