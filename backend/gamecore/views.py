@@ -31,8 +31,9 @@ def join_user_to_room(user, uuid=None):
         filters['id'] = uuid
     else:
         filters['is_private'] = False
-    
-    available_rooms = RoomModel.objects.annotate(users_amount=Count('users')).filter(**filters)
+
+    available_rooms = RoomModel.objects.annotate(
+        users_amount=Count('users')).filter(**filters)
     if not available_rooms.exists():
         return False
 
@@ -44,7 +45,7 @@ def join_user_to_room(user, uuid=None):
 @extend_schema(tags=[VIEW_TAG])
 class UserGetCreateRoomView(APIView):
     permission_classes = (IsAuthenticated,)
-    
+
     @extend_schema(
         request=CreateRoomSerializer,
         responses={
@@ -67,7 +68,7 @@ class UserGetCreateRoomView(APIView):
     )
     def post(self, request):
         user_in_room = get_user_room(user=request.user)
-        
+
         if user_in_room.exists():
             return Response({'detail': 'You already in game'}, status=422)
 
@@ -81,11 +82,10 @@ class UserGetCreateRoomView(APIView):
         return Response(RoomSerializer(room).data, status=200)
 
 
-
 @extend_schema(tags=[VIEW_TAG])
 class UserJoinRoomView(APIView):
     permission_classes = (IsAuthenticated,)
-    
+
     @extend_schema(
         request=JoinRoomSerializer,
         responses={
@@ -95,7 +95,8 @@ class UserJoinRoomView(APIView):
         }
     )
     def post(self, request):
-        room_uuid = JoinRoomSerializer(request.data).data.get('room_uuid', None)
+        room_uuid = JoinRoomSerializer(
+            request.data).data.get('room_uuid', None)
         user_room = get_user_room(request.user).first()
         if user_room:
             return Response({'detail': 'You already in game'}, status=422)
@@ -127,7 +128,7 @@ class UserLeaveRoomView(APIView):
 
         if not user_room.exists():
             return Response({'detail': 'You don\'t play in any room'}, status=422)
-        
+
         user_room = user_room.first()
         user_room.users.remove(request.user)
         if not user_room.users.count():
