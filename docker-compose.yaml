@@ -9,9 +9,7 @@ services:
     depends_on:
       - db
     env_file:
-      - .env
-    ports:
-      - $PORT:$PORT
+      - ./enviroment/web.env
 
   db:
     image: postgres
@@ -19,6 +17,14 @@ services:
     volumes:
       - ./data/:/var/lib/postgresql
     env_file:
-      - .env
-    ports:
-      - $POSTGRES_PORT:$POSTGRES_PORT
+      - ./enviroment/db.env
+
+  ui:
+    container_name: cards-ui
+    build: ./frontend
+    volumes:
+      - ./frontend:/app/
+    depends_on:
+      - web
+    env_file:
+      - ./enviroment/ui.env
