@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { setLocation } from '../store/reducers/navigationReducer';
 import Navigation from '../constants/navigation';
+import Header from './Header';
 
 function App() {
   const dispatch = useDispatch();
@@ -11,7 +12,12 @@ function App() {
     dispatch(setLocation({ location: Navigation.login.name }));
   }
 
-  return Navigation[location]?.component();
+  return (
+    <>
+      <Header />
+      {Navigation[location]?.component()}
+    </>
+  )
 }
 
 export default App;
