@@ -20,7 +20,7 @@ function Header() {
             {
                 accessToken
                     ? <p>Welcome, {username}</p>
-                    : <button className="btn btn-primary" onClick={switchAuthPage}>{buttonText}</button>
+                    : <button className="btn btn-outline-primary" onClick={switchAuthPage}>{buttonText}</button>
             }
         </div>
     )

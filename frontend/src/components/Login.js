@@ -15,7 +15,7 @@ function Login() {
             <div className="form-group w-50 my-2">
               <input type="password" name="password" placeholder="Password" className='form-control' />
             </div>
-            <button type="submit" className="btn btn-primary my-2">Login</button>
+            <button type="submit" className="btn btn-outline-success my-2">Login</button>
           </form>
         </div>
       </div>

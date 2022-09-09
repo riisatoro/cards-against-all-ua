@@ -1,4 +1,5 @@
 import Login from '../components/Login';
+import Profile from '../components/Profile';
 import Registration from '../components/Registration';
 
 const Navigation = {
@@ -10,9 +11,9 @@ const Navigation = {
         name: 'registration',
         component: Registration,
     },
-    availableRooms: {
-        name: 'availableRooms',
-        component: () => {},
+    profile: {
+        name: 'profile',
+        component: Profile,
     },
 }
 
