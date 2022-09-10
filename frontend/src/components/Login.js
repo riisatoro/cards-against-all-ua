@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import Navigation from '../constants/navigation';
-import { fetchAccessTokens } from '../store/reducers/authSlice';
+import { fetchAccessTokens } from '../store/reducers/apiRequests';
 
 
 const Login = () => {

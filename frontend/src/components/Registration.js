@@ -1,7 +1,11 @@
+import { useDispatch } from 'react-redux';
 import Landing from './Landing';
 import { useFormik } from 'formik';
+import { createAccount } from '../store/reducers/apiRequests';
 
 const Registration = () => {
+  const dispatch = useDispatch();
+  
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -10,7 +14,7 @@ const Registration = () => {
       repeat_password: '',
     },
     onSubmit: (values) => {
-      console.log(values);
+      dispatch(createAccount(values));
     }
   });
 
@@ -36,7 +40,7 @@ const Registration = () => {
               <input
                 type="email"
                 name="email"
-                placeholder="Repeat password"
+                placeholder="Email"
                 className='form-control'
                 onChange={formik.handleChange}
                 value={formik.values.email}
