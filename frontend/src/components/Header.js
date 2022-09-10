@@ -1,29 +1,31 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 import Navigation from '../constants/navigation';
-import { setLocation } from '../store/reducers/navigationReducer';
 
 function Header() {
-    const dispatch = useDispatch();
-    const { accessToken } = useSelector((state) => state.auth);
-    const { location } = useSelector((state) => state.navigation);
-    const username = 'Anon';
-    const buttonText = location === Navigation.registration.name ? 'Login' : 'Registration';
+  const { accessToken } = useSelector((state) => state.auth);
+  const { pathname } = useLocation();
+  const username = 'Anon';
 
-    const switchAuthPage = () => {
-        location === Navigation.registration.name
-            ? dispatch(setLocation({ location: Navigation.login.name }))
-            : dispatch(setLocation({ location: Navigation.registration.name }))
-    }
-
+  if (!accessToken) {
     return (
-        <div className="container-fluid">
-            {
-                accessToken
-                    ? <p>Welcome, {username}</p>
-                    : <button className="btn btn-outline-primary" onClick={switchAuthPage}>{buttonText}</button>
-            }
-        </div>
+      <div className="container-fluid">
+        <Link
+          to={pathname === Navigation.login ? Navigation.registration : Navigation.login}
+          className="btn btn-outline-primary"
+        >
+          {pathname === Navigation.login ? 'Registration' : 'Login'}
+        </Link>
+      </div>
     )
+  }
+
+  return (
+    <div className="container-fluid">
+      <p>Welcome, {username}</p>
+    </div>
+  )
 }
 
 export default Header;

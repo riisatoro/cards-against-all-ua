@@ -1,15 +1,13 @@
-import axios from 'axios';
 import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
-import Landing from './Landing';
-import { LOGIN_URL } from '../constants/api.js';
-import { login } from '../store/reducers/authSlice';
-import { setLocation } from '../store/reducers/navigationReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 import Navigation from '../constants/navigation';
+import { fetchAccessTokens } from '../store/reducers/authSlice';
 
 
 const Login = () => {
   const dispatch = useDispatch();
+  const { accessToken } = useSelector((state) => state.auth);
 
   const formik = useFormik({
     initialValues: {
@@ -17,19 +15,16 @@ const Login = () => {
       password: '',
     },
     onSubmit: (values) => {
-      axios.post(LOGIN_URL, values)
-      .then((response) => {
-        dispatch(login(response.data));
-      })
-      .catch((error) => console.log(error));
+      dispatch(fetchAccessTokens(values));
     }
   });
+
+  if (accessToken) return <Navigate to={Navigation.profile} />
 
   return (
     <div className="container">
       <div className="row">
         <div className="col col-sm-12 col-md-6">
-          <Landing />
         </div>
         <div className="col col-sm-12 col-md-6 align-items-center">
           <form onSubmit={formik.handleSubmit}>

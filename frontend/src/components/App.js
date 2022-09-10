@@ -1,22 +1,34 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { setLocation } from '../store/reducers/navigationReducer';
-import Navigation from '../constants/navigation';
-import Header from './Header';
+import {
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { useSelector } from "react-redux";
 
-function App() {
-  const dispatch = useDispatch();
+import MainContent from './MainContent';
+import Login from "./Login";
+import Registration from "./Registration";
+import Profile from "./Profile";
+import Navigation from "../constants/navigation";
+import { useEffect } from "react";
+
+const ProtectedRoute = ({ children }) => {
   const { accessToken } = useSelector((state) => state.auth);
-  const { location } = useSelector((state) => state.navigation);
+  if (!accessToken) return <Navigate to={Navigation.login} />
+  return children;
+}
 
-  if (!accessToken && ![Navigation.login.name, Navigation.registration.name].includes(location)) {
-    dispatch(setLocation({ location: Navigation.login.name }));
-  }
-
+const App = () => {
   return (
-    <>
-      <Header />
-      {Navigation[location]?.component()}
-    </>
+    <div className="container-fluid">
+      <Routes>
+        <Route path={Navigation.root} element={<MainContent />}>
+          <Route path={Navigation.login} element={<Login />} />
+          <Route path={Navigation.registration} element={<Registration />} />
+          <Route path={Navigation.profile} element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        </Route>
+      </Routes>
+    </div>
   )
 }
 
