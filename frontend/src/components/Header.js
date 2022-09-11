@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import Navigation from '../constants/navigation';
+import { Navigation } from '../constants';
 import { fetchUserData } from '../store/reducers/apiRequests';
 
 function Header() {

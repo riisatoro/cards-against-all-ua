@@ -5,7 +5,7 @@ import {
     REGISTRATION_URL,
     USER_DATA_URL,
     AVAILABLE_GAMES_URL,
-} from '../../constants/api';
+} from '../../constants';
 
 export const fetchAccessTokens = createAsyncThunk(
     'auth/fetchAccessTokens',
