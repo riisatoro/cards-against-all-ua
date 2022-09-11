@@ -1,12 +1,17 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import Navigation from '../constants/navigation';
+import { fetchUserData } from '../store/reducers/apiRequests';
 
 function Header() {
-  const { accessToken } = useSelector((state) => state.auth);
+  const dispatch = useDispatch()
+  const { accessToken, username } = useSelector((state) => state.auth);
   const { pathname } = useLocation();
-  const username = 'Anon';
+
+  useEffect(() => {
+    if (accessToken) dispatch(fetchUserData());
+  }, [accessToken])
 
   if (!accessToken) {
     return (

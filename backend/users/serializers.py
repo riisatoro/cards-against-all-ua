@@ -21,3 +21,9 @@ class SaveUserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email', 'password',)
+
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username',)

@@ -10,6 +10,7 @@ from gamecore.models import (
     RoomModel,
     UserRoomModel,
 )
+from users.serializers import UserSerializer
 
 
 class DefaultResponseSerializer(Serializer):
@@ -18,12 +19,6 @@ class DefaultResponseSerializer(Serializer):
     class Meta:
         fields = ('detail',)
 
-
-class UserSerializer(ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ('username',)
 
 
 class CreateRoomSerializer(ModelSerializer):

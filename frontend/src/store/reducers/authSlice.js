@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAccessTokens } from './apiRequests';
+import { fetchAccessTokens, fetchUserData } from './apiRequests';
 
 const initialState = {
     accessToken: null,
     refreshToken: null,
+    username: '',
 };
 
 const authSlice = createSlice({
@@ -16,12 +17,16 @@ const authSlice = createSlice({
          },
     },
     extraReducers: {
-        [fetchAccessTokens.pending]: (state, action) => { },
         [fetchAccessTokens.fulfilled]: (state, action) => {
             state.accessToken = action.payload.access;
             state.refreshToken = action.payload.refresh;
         },
-        [fetchAccessTokens.rejected]: (state, action) => { },
+        // [fetchAccessTokens.rejected]: (state, action) => { },
+
+        [fetchUserData.fulfilled]: (state, action) => {
+            state.username = action.payload.username;
+        },
+        [fetchUserData.rejected]: (state, action) => { },
     }
 });
 
