@@ -12,8 +12,6 @@ const Header = () => {
     currentGame: {
       id,
       leader,
-      round_number: roundNumber,
-      round_end_time: roundEndTime,
       is_started: isStarted,
     } } = useSelector((state) => state.game);
 

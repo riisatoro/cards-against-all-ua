@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserRoomData, joinUserToRoom, userLeaveRoom } from '../store/reducers/apiRequests';
 import { Navigate, Link } from 'react-router-dom';
 import { Navigation } from '../constants';
-import _ from 'lodash';
-
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -23,7 +21,7 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(fetchUserRoomData());
-  }, [])
+  }, [dispatch])
 
   return (
     <div className="container">
