@@ -9,8 +9,8 @@ import MainContent from './MainContent';
 import Login from "./Login";
 import Registration from "./Registration";
 import Profile from "./Profile";
+import GameBase from './GameBase';
 import { Navigation } from "../constants";
-import { useEffect } from "react";
 
 const ProtectedRoute = ({ children }) => {
   const { accessToken } = useSelector((state) => state.auth);
@@ -26,6 +26,7 @@ const App = () => {
           <Route path={Navigation.login} element={<Login />} />
           <Route path={Navigation.registration} element={<Registration />} />
           <Route path={Navigation.profile} element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path={Navigation.game} element={<ProtectedRoute><GameBase /></ProtectedRoute>} />
         </Route>
       </Routes>
     </div>

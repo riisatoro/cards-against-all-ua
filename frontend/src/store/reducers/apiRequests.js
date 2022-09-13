@@ -4,8 +4,10 @@ import {
     LOGIN_URL,
     REGISTRATION_URL,
     USER_DATA_URL,
-    AVAILABLE_GAMES_URL,
+    GET_OR_CREATE_USER_ROOM,
+    USER_LEAVE_ROOM
 } from '../../constants';
+
 
 export const fetchAccessTokens = createAsyncThunk(
     'auth/fetchAccessTokens',
@@ -33,12 +35,32 @@ export const fetchUserData = createAsyncThunk(
     }
 )
 
-export const fetchAvailableGames = createAsyncThunk(
-    'game/fetchAvailableGames',
+export const fetchUserRoomData = createAsyncThunk(
+    'game/fetchUserRoomData',
     async (payload, { getState }) => {
         const { auth: { accessToken } } = getState();
         const apiInstance = axios.create({ headers: { "Authorization": `Bearer ${accessToken}` } })
-        const response = await apiInstance.get(AVAILABLE_GAMES_URL);
+        const response = await apiInstance.get(GET_OR_CREATE_USER_ROOM);
+        return await response.data;
+    }
+)
+
+export const joinUserToRoom = createAsyncThunk(
+    'game/joinUserToRoom',
+    async (payload, { getState }) => {
+        const { auth: { accessToken } } = getState();
+        const apiInstance = axios.create({ headers: { "Authorization": `Bearer ${accessToken}` } })
+        const response = await apiInstance.post(GET_OR_CREATE_USER_ROOM);
+        return await response.data;
+    }
+)
+
+export const userLeaveRoom = createAsyncThunk(
+    'game/userLeaveRoom',
+    async (payload, { getState }) => {
+        const { auth: { accessToken } } = getState();
+        const apiInstance = axios.create({ headers: { "Authorization": `Bearer ${accessToken}` } })
+        const response = await apiInstance.post(USER_LEAVE_ROOM, payload);
         return await response.data;
     }
 )

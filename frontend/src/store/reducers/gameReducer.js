@@ -1,9 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAvailableGames } from './apiRequests';
+import { fetchUserRoomData, joinUserToRoom, userLeaveRoom } from './apiRequests';
 
 const initialState = {
     currentGame: {},
-    availableGames: [],
 }
 
 const gameReducer = createSlice({
@@ -11,10 +10,18 @@ const gameReducer = createSlice({
     initialState,
     reducers: { },
     extraReducers: {
-        [fetchAvailableGames.fulfilled]: (state, action) => {
-            console.log(action.payload);
+        [fetchUserRoomData.fulfilled]: (state, action) => {
+            state.currentGame = action.payload;
         },
         // [fetchAvailableGames.rejected]: (state, action) => { },
+        [joinUserToRoom.fulfilled]: (state, action) => {
+            state.currentGame = action.payload;
+        },
+        // [joinUserToRoom.rejected]: (state, action) => { },
+        [userLeaveRoom.fulfilled]: (state, action) => {
+            state.currentGame = {};
+        }
+        // [userLeaveRoom.rejected]: (state, action) => { },
     }
 })
 
