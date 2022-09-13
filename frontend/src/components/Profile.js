@@ -10,7 +10,7 @@ const Profile = () => {
   const dispatch = useDispatch();
   const [redirect, setRedirect] = useState(false);
 
-  const { currentGame } = useSelector((state) => state.game);
+  const { currentGame: { id } } = useSelector((state) => state.game);
 
   const createRoom = () => {
     dispatch(joinUserToRoom());
@@ -18,7 +18,7 @@ const Profile = () => {
   };
 
   const leaveRoom = () => {
-    dispatch(userLeaveRoom({ room_uuid: currentGame.id }))
+    dispatch(userLeaveRoom({ room_uuid: id }))
   }
 
   useEffect(() => {
@@ -27,14 +27,14 @@ const Profile = () => {
 
   return (
     <div className="container">
-      {redirect && <Navigate to={Navigation.game} />}
+      {redirect && id && <Navigate to={Navigation.game} />}
       <div className="row">
         <div className="col col-sm-12 col-lg-6">
           Profile status
         </div>
         <div className="col col-sm-12 col-lg-6">
           {
-            !_.isEmpty(currentGame)
+            id
             && (
               <div className="my-4 alert alert-warning">
                 <p className="text-center"><b>You have unfinished game</b></p>
@@ -46,7 +46,7 @@ const Profile = () => {
             )
           }
 
-          {_.isEmpty(currentGame)
+          {!id
             && (
               <>
                 <div className="d-flex justify-content-evenly mb-4">

@@ -1,24 +1,13 @@
-import { useState } from 'react';
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
+import { Navigate } from 'react-router-dom';
+import { Navigation } from "../../constants";
+import { userLeaveRoom } from '../../store/reducers/apiRequests';
+import RoomLinkButton from "./RoomLinkButton";
 
-const RoomLinkButton = ({ roomID }) => {
-  const [isCopied, setIsCopied] = useState(false);
-
-  const copyLinkToClipboard = () => {
-    const url = window.location.href + roomID + '/';
-    navigator.clipboard.writeText(url);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 1000);
-  }
-
-  return (
-    <button className="btn btn-outline-primary" style={{minWidth: '128px'}} onClick={copyLinkToClipboard}>
-      <small>{isCopied ? 'Copied!' : 'Copy room URL'}</small>
-    </button>
-  )
-}
 
 const Header = () => {
+  const dispatch = useDispatch();
+
   const {
     currentGame: {
       id,
@@ -28,25 +17,22 @@ const Header = () => {
       is_started: isStarted,
     } } = useSelector((state) => state.game);
 
-
-
   return (
     <div className="d-flex align-items-center justify-content-evenly">
+      {!id && <Navigate to={Navigation.profile} />}
+
       {!isStarted && (
-        <>
-          <p className="mb-0">Waiting for other players to join...</p>
-          <div className="text-end"><RoomLinkButton {...{ roomID: id }} /></div>
-        </>
+        <p className="mb-0">Waiting for other players to join...</p>
       )}
 
       {isStarted && (
-        <>
-          <div>
-            <p><small>Current leader:</small></p>
-          </div>
-          <div className="text-end"><RoomLinkButton {...{ roomID: id }} /></div>
-        </>
+        <div>
+          <p><small>Current leader: {leader?.user?.username}</small></p>
+        </div>
       )}
+
+      <div className="text-end"><RoomLinkButton {...{ roomID: id }} /></div>
+      <button className="btn btn-outline-danger" onClick={() => dispatch(userLeaveRoom({ room_id: id }))}>LeaveRoom</button>
     </div>
   )
 }
