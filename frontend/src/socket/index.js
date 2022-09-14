@@ -1,6 +1,8 @@
-const socket = new WebSocket(`ws://${process.env.REACT_APP_PROXY}/game/`)
+let socket = null;
 
-const connectSocket = () => {
+const connectSocket = (room_id) => {
+  socket = new WebSocket(`ws://${process.env.REACT_APP_PROXY}/game/${room_id}/`)
+  
   socket.onopen = (e) => {
     console.log('open', e)
   }

@@ -1,7 +1,7 @@
-from django.urls import re_path
+from django.urls import path
 
 from gamesocket.consumers import GameRoomNotifications
 
 websocket_urlpatterns = [
-    re_path(r'game/$', GameRoomNotifications.as_asgi()),
+    path('game/<str:room_id>/', GameRoomNotifications.as_asgi()),
 ]

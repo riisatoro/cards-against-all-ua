@@ -1,12 +1,11 @@
 import { Header, CardField, PlayerList } from './game';
 import { connectSocket } from '../socket';
-import { connect } from 'react-redux';
-import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const GameBase = () => {
-  useEffect(() => {
-    connectSocket()
-  }, []);
+  const { accessToken } = useSelector((state) => state.auth);
+  const { currentGame: { id } } = useSelector((state) => state.game);
+  if (accessToken) connectSocket(id);
 
   return (
     <div className="container">
