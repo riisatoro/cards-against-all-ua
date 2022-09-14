@@ -1,5 +1,6 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
+from asgiref.sync import async_to_sync
 
 
 class GameRoomNotifications(WebsocketConsumer):
@@ -9,7 +10,7 @@ class GameRoomNotifications(WebsocketConsumer):
 
         if user.is_authenticated:
             self.accept()
-            self.channel_layer.group_add(self.room_id, self.channel_name)
+            async_to_sync(self.channel_layer.group_add)(self.room_id, self.channel_name)
         else:
             self.close()
 
@@ -17,7 +18,5 @@ class GameRoomNotifications(WebsocketConsumer):
         self.channel_layer.group_discard(self.room_id, self.channel_name)
         self.close()
 
-    def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
-        self.send(text_data=json.dumps({"message": message}))
+    def send_game_info(self, data):
+        self.send(text_data=json.dumps(data['data']))
