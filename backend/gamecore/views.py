@@ -15,7 +15,7 @@ from gamecore.serializers import (
 )
 
 
-VIEW_TAG = 'Game room'
+VIEW_TAG = "Game room"
 
 
 def get_user_room(user):
@@ -23,17 +23,15 @@ def get_user_room(user):
 
 
 def join_user_to_room(user, uuid=None):
-    filters = {
-        'is_ended': False,
-        'users_amount__lt': settings.MAX_ROOM_PLAYER
-    }
+    filters = {"is_ended": False, "users_amount__lt": settings.MAX_ROOM_PLAYER}
     if uuid:
-        filters['id'] = uuid
+        filters["id"] = uuid
     else:
-        filters['is_private'] = False
+        filters["is_private"] = False
 
-    available_rooms = RoomModel.objects.annotate(
-        users_amount=Count('users')).filter(**filters)
+    available_rooms = RoomModel.objects.annotate(users_amount=Count("users")).filter(
+        **filters
+    )
     if not available_rooms.exists():
         return False
 
@@ -51,7 +49,7 @@ class UserGetCreateRoomView(APIView):
         responses={
             200: RoomSerializer,
             401: DefaultResponseSerializer,
-        }
+        },
     )
     def get(self, request):
         user_room = get_user_room(request.user).first()
@@ -64,17 +62,17 @@ class UserGetCreateRoomView(APIView):
             200: RoomSerializer,
             401: DefaultResponseSerializer,
             422: DefaultResponseSerializer,
-        }
+        },
     )
     def post(self, request):
         user_in_room = get_user_room(user=request.user)
 
         if user_in_room.exists():
-            return Response({'detail': 'You already in game'}, status=422)
+            return Response({"detail": "You already in game"}, status=422)
 
         room = CreateRoomSerializer(data=request.POST)
         if not room.is_valid():
-            return Response({'detail': 'Got invalid data for game room'}, status=422)
+            return Response({"detail": "Got invalid data for game room"}, status=422)
 
         room = room.save()
         room.users.add(self.request.user)
@@ -92,22 +90,22 @@ class UserJoinRoomView(APIView):
             200: RoomSerializer,
             401: DefaultResponseSerializer,
             422: DefaultResponseSerializer,
-        }
+        },
     )
     def post(self, request):
-        room_uuid = JoinRoomSerializer(
-            request.data).data.get('room_uuid', None)
+        room_uuid = JoinRoomSerializer(request.data).data.get("room_uuid", None)
         user_room = get_user_room(request.user).first()
         if user_room:
-            return Response({'detail': 'You already in game'}, status=422)
+            return Response({"detail": "You already in game"}, status=422)
 
         room, is_joined = join_user_to_room(request.user, uuid=room_uuid)
         if not is_joined:
             return Response(
-                {'detail': 'Can\t join to room. Either no available rooms left, or you got wrong invitation link.'},
+                {
+                    "detail": "Can\t join to room. Either no available rooms left, or you got wrong invitation link."
+                },
                 status=422,
             )
-
         return Response(RoomSerializer(room).data, status=200)
 
 
@@ -121,17 +119,17 @@ class UserLeaveRoomView(APIView):
             200: DefaultResponseSerializer,
             401: DefaultResponseSerializer,
             422: DefaultResponseSerializer,
-        }
+        },
     )
     def post(self, request):
         user_room = get_user_room(user=request.user)
 
         if not user_room.exists():
-            return Response({'detail': 'You don\'t play in any room'}, status=422)
+            return Response({"detail": "You don't play in any room"}, status=422)
 
         user_room = user_room.first()
         user_room.users.remove(request.user)
         if not user_room.users.count():
             user_room.delete()
 
-        return Response({'detail': 'You have left from the room'}, status=200)
+        return Response({"detail": "You have left from the room"}, status=200)
