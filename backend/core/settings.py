@@ -122,6 +122,14 @@ USE_I18N = True
 USE_TZ = True
 
 ASGI_APPLICATION = "core.asgi.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)]
+        }
+    }
+}
 
 STATIC_URL = "static/"
 
