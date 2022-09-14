@@ -1,6 +1,13 @@
 import { Header, CardField, PlayerList } from './game';
+import { connectSocket } from '../socket';
+import { connect } from 'react-redux';
+import { useEffect } from 'react';
 
 const GameBase = () => {
+  useEffect(() => {
+    connectSocket()
+  }, []);
+
   return (
     <div className="container">
       <Header />

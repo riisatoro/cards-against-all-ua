@@ -15,6 +15,7 @@ django-rest-framework = "^0.1.0"
 djangorestframework-simplejwt = "^5.1.0"
 django-database-url = "^1.0.3"
 drf-spectacular = "^0.22.1"
+channels = "^3.0.5"
 
 [tool.poetry.dev-dependencies]
 ipython = "^8.3.0"
