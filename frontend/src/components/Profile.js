@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserRoomData, joinUserToRoom, userLeaveRoom } from '../store/reducers/apiRequests';
+import { fetchUserRoomData, createUserRoom, joinUserRoom, userLeaveRoom } from '../store/reducers/apiRequests';
 import { Navigate, Link } from 'react-router-dom';
 import { Navigation } from '../constants';
 
@@ -11,9 +11,19 @@ const Profile = () => {
   const { currentGame: { id } } = useSelector((state) => state.game);
 
   const createRoom = () => {
-    dispatch(joinUserToRoom());
-    setRedirect(true)
+    dispatch(createUserRoom());
+    setRedirect(true);
   };
+
+  const joinRoom = (room_id = null) => {
+    if (room_id) {
+      dispatch(joinUserRoom());
+    } else {
+      dispatch(joinUserRoom({ room_uuid: room_id}));
+    }
+
+    setRedirect(true);
+  }
 
   const leaveRoom = () => {
     dispatch(userLeaveRoom({ room_uuid: id }))
@@ -49,7 +59,7 @@ const Profile = () => {
               <>
                 <div className="d-flex justify-content-evenly mb-4">
                   <button className="btn btn-outline-primary" onClick={createRoom}>New room</button>
-                  <button className="btn btn-outline-success">Join room</button>
+                  <button className="btn btn-outline-success" onClick={joinRoom}>Join room</button>
                 </div>
 
                 <div className="d-flex justify-content-between">

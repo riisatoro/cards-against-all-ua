@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 const GameBase = () => {
   const { accessToken } = useSelector((state) => state.auth);
   const { currentGame: { id } } = useSelector((state) => state.game);
-  if (accessToken) connectSocket(id);
+  if (accessToken && id) connectSocket(id);
 
   return (
     <div className="container">
