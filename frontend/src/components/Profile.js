@@ -12,16 +12,8 @@ const Profile = () => {
     dispatch(createUserRoom());
   };
 
-  const joinRoom = (room_id = null) => {
-    if (room_id) {
-      dispatch(joinUserRoom());
-    } else {
-      dispatch(joinUserRoom({ room_uuid: room_id}));
-    }
-  }
-
-  const leaveRoom = () => {
-    dispatch(userLeaveRoom({ room_uuid: roomID }))
+  const joinRoom = () => {
+    dispatch(joinUserRoom());
   }
 
   useEffect(() => {
