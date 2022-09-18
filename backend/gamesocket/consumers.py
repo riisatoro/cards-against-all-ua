@@ -13,5 +13,5 @@ class GameRoomNotifications(WebsocketConsumer):
         self.channel_layer.group_discard(self.room_id, self.channel_name)
         self.close()
 
-    def send_game_info(self, data):
+    def send_game_data(self, data):
         self.send(text_data=json.dumps(data['data']))

@@ -1,11 +1,10 @@
 import { Header, CardField, PlayerList } from './game';
-import { connectSocket } from '../socket';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 const GameBase = () => {
   const { accessToken } = useSelector((state) => state.auth);
-  const { currentGame: { id } } = useSelector((state) => state.game);
-  if (accessToken && id) connectSocket(id, accessToken);
+  const { roomID } = useSelector((state) => state.game);
 
   return (
     <div className="container">

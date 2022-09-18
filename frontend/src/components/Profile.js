@@ -6,13 +6,10 @@ import { Navigation } from '../constants';
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const [redirect, setRedirect] = useState(false);
-
-  const { currentGame: { id } } = useSelector((state) => state.game);
+  const { roomID } = useSelector((state) => state.game);
 
   const createRoom = () => {
     dispatch(createUserRoom());
-    setRedirect(true);
   };
 
   const joinRoom = (room_id = null) => {
@@ -21,12 +18,10 @@ const Profile = () => {
     } else {
       dispatch(joinUserRoom({ room_uuid: room_id}));
     }
-
-    setRedirect(true);
   }
 
   const leaveRoom = () => {
-    dispatch(userLeaveRoom({ room_uuid: id }))
+    dispatch(userLeaveRoom({ room_uuid: roomID }))
   }
 
   useEffect(() => {
@@ -35,39 +30,19 @@ const Profile = () => {
 
   return (
     <div className="container">
-      {redirect && id && <Navigate to={Navigation.game} />}
+      {roomID && <Navigate to={Navigation.game} />}
       <div className="row">
         <div className="col col-sm-12 col-lg-6">
           Profile status
         </div>
-        <div className="col col-sm-12 col-lg-6">
-          {
-            id
-            && (
-              <div className="my-4 alert alert-warning">
-                <p className="text-center"><b>You have unfinished game</b></p>
-                <div className="d-flex justify-content-evenly">
-                  <Link className="btn btn-outline-success" to={Navigation.game}>Continue playing</Link>
-                  <button className="btn btn-outline-danger" onClick={leaveRoom}>Leave room</button>
-                </div>
-              </div>
-            )
-          }
+        <div className="d-flex justify-content-evenly mb-4">
+          <button className="btn btn-outline-primary" onClick={createRoom}>New room</button>
+          <button className="btn btn-outline-success" onClick={joinRoom}>Join room</button>
+        </div>
 
-          {!id
-            && (
-              <>
-                <div className="d-flex justify-content-evenly mb-4">
-                  <button className="btn btn-outline-primary" onClick={createRoom}>New room</button>
-                  <button className="btn btn-outline-success" onClick={joinRoom}>Join room</button>
-                </div>
-
-                <div className="d-flex justify-content-between">
-                  <input type="text" name="room_id" placeholder="Enter room id" className="form-control w-75" />
-                  <button className="btn btn-outline-warning">Join private room</button>
-                </div>
-              </>
-            )}
+        <div className="d-flex justify-content-between">
+          <input type="text" name="room_id" placeholder="Enter room id" className="form-control w-75" />
+          <button className="btn btn-outline-warning">Join private room</button>
         </div>
       </div>
     </div>

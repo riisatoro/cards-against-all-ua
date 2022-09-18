@@ -1,7 +1,5 @@
 from random import choice
 
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
 from django.db.models import Count
 from django.conf import settings
 from drf_spectacular.utils import extend_schema
@@ -14,7 +12,10 @@ from gamecore.serializers import (
     DefaultResponseSerializer,
     JoinRoomSerializer,
     RoomSerializer,
+    UserRoomSerializer,
+
 )
+from gamesocket.notifications import notify_room_members
 
 
 VIEW_TAG = "Game room"
@@ -109,6 +110,10 @@ class UserJoinRoomView(APIView):
                 status=422,
             )
 
+        group = str(room.id)
+        data = RoomSerializer(room).data
+
+        notify_room_members(group, data)
         return Response(RoomSerializer(room).data, status=200)
 
 
@@ -132,7 +137,12 @@ class UserLeaveRoomView(APIView):
 
         user_room = user_room.first()
         user_room.users.remove(request.user)
+        
         if not user_room.users.count():
             user_room.delete()
+        else:
+            group = str(user_room.id)
+            data = RoomSerializer(user_room).data
+            notify_room_members(group, data)
 
         return Response({"detail": "You have left from the room"}, status=200)

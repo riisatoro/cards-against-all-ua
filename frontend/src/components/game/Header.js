@@ -9,28 +9,26 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const {
-    currentGame: {
-      id,
-      leader,
-      is_started: isStarted,
-    } } = useSelector((state) => state.game);
+    roomID,
+    currentGame
+  } = useSelector((state) => state.game);
 
   return (
     <div className="d-flex align-items-center justify-content-evenly">
-      {!id && <Navigate to={Navigation.profile} />}
+      {!roomID && <Navigate to={Navigation.profile} />}
 
-      {!isStarted && (
+      {!currentGame?.is_started && (
         <p className="mb-0">Waiting for other players to join...</p>
       )}
 
-      {isStarted && (
+      {currentGame?.is_started && (
         <div>
-          <p><small>Current leader: {leader?.user?.username}</small></p>
+          <p><small>Current leader: {currentGame?.leader?.user?.username}</small></p>
         </div>
       )}
 
-      <div className="text-end"><RoomLinkButton {...{ roomID: id }} /></div>
-      <button className="btn btn-outline-danger" onClick={() => dispatch(userLeaveRoom({ room_id: id }))}>LeaveRoom</button>
+      <div className="text-end"><RoomLinkButton {...{ roomID }} /></div>
+      <button className="btn btn-outline-danger" onClick={() => dispatch(userLeaveRoom({ room_id: roomID }))}>LeaveRoom</button>
     </div>
   )
 }
