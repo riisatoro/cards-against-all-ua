@@ -1,5 +1,7 @@
 from random import choice
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.db.models import Count
 from django.conf import settings
 from drf_spectacular.utils import extend_schema
@@ -106,6 +108,7 @@ class UserJoinRoomView(APIView):
                 },
                 status=422,
             )
+
         return Response(RoomSerializer(room).data, status=200)
 
 

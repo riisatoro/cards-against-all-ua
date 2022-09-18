@@ -20,6 +20,7 @@ const authSlice = createSlice({
         [fetchAccessTokens.fulfilled]: (state, action) => {
             state.accessToken = action.payload.access;
             state.refreshToken = action.payload.refresh;
+            document.cookie = `Authorization=Bearer ${state.accessToken}`;
         },
         // [fetchAccessTokens.rejected]: (state, action) => { },
 
