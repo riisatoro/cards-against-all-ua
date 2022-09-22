@@ -28,6 +28,7 @@ def get_user_room(user):
 
 
 def join_user_to_room(user, uuid=None):
+    # add sorting from oldest to newest from more users to less
     filters = {"is_ended": False, "users_amount__lt": settings.MAX_ROOM_PLAYER}
     if uuid:
         filters["id"] = uuid

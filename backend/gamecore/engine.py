@@ -50,6 +50,7 @@ class GameEngine:
 
     @staticmethod
     def select_question_card(room: RoomModel):
+        
         return room
 
     @staticmethod
@@ -59,9 +60,6 @@ class GameEngine:
 
         if room.users.count() >= settings.MIN_ROOM_PLAYERS:
             room.is_started = True
-            # room = GameEngine.select_room_leader(room)
-            # room = GameEngine.select_question_card(room)
-            # room = GameEngine.distribute_answer_cards(room)
 
         room.save()
         return True
