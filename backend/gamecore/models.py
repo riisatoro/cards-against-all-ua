@@ -30,12 +30,15 @@ class CardModel(Model):
     QUESTION = 'question'
     ANSWER = 'answer'
     CARD_TYPES = (
-        (QUESTION, 'Answer'),
-        (ANSWER, 'Question'),
+        (ANSWER, 'Answer'),
+        (QUESTION, 'Question'),
     )
 
     text = CharField(max_length=255)
     card_type = CharField(max_length=100, choices=CARD_TYPES)
+
+    def __str__(self):
+        return f'[{self.id}] {self.card_type}: {self.text}'
 
 
 class RoomModel(Model):
@@ -58,5 +61,5 @@ class UserRoomModel(Model):
     user = ForeignKey(to=User, on_delete=CASCADE)
 
     score = PositiveIntegerField(default=0)
-    answer = ForeignKey(to='CardModel', on_delete=CASCADE, related_name='answer', null=True)
+    answer = ManyToManyField(to='CardModel', related_name='answer')
     cards = ManyToManyField(to='CardModel', related_name='cards')

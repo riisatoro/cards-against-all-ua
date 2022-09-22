@@ -5,6 +5,7 @@ from django.conf import settings
 from drf_spectacular.utils import extend_schema
 from rest_framework.views import APIView, Response
 from rest_framework.permissions import IsAuthenticated
+from gamecore.engine import GameEngine
 
 from gamecore.models import RoomModel
 from gamecore.serializers import (
@@ -16,6 +17,7 @@ from gamecore.serializers import (
 
 )
 from gamesocket.notifications import notify_room_members
+from tasks.tasks import start_new_round
 
 
 VIEW_TAG = "Game room"
@@ -109,6 +111,9 @@ class UserJoinRoomView(APIView):
                 },
                 status=422,
             )
+        
+        if GameEngine.try_start_game(room):
+            start_new_round.apply_async((room.id,), countdown=settings.FIRST_ROUND_COUNTDOWN)
 
         group = str(room.id)
         data = RoomSerializer(room).data

@@ -10,6 +10,7 @@ from gamecore.models import (
 @admin.register(CardModel)
 class CardModelAdmin(admin.ModelAdmin):
     list_display = ('text', 'card_type',)
+    list_filter = ('card_type',)
 
 
 @admin.register(RoomModel)
@@ -24,4 +25,5 @@ class RoomModelAdmin(admin.ModelAdmin):
 
 @admin.register(UserRoomModel)
 class UserRoomModelAdmin(admin.ModelAdmin):
-    list_display = ('room', 'user', 'score', 'answer',)
+    list_display = ('room', 'user', 'score',)
+    filter_horizontal = ('answer', 'cards',)

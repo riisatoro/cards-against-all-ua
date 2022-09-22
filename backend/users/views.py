@@ -4,8 +4,6 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView, Response
 
-from tasks.tasks import hello
-
 from users.serializers import CreateUserSerializer, SaveUserSerializer, UserSerializer
 
 
@@ -34,5 +32,4 @@ class UserDataView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        hello.apply_async(('random name',), countdown=10)
         return Response(UserSerializer(request.user).data, 200)

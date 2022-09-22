@@ -37,7 +37,7 @@ class CardSerializer(ModelSerializer):
 
 
 class UserRoomSerializer(ModelSerializer):
-    answer = CardSerializer()
+    answer = CardSerializer(many=True)
     cards = CardSerializer(many=True)
     user = UserSerializer()
 
