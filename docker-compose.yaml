@@ -17,7 +17,7 @@ services:
     image: postgres
     container_name: cards-db
     volumes:
-      - ./data/:/var/lib/postgresql
+      - ./data/postgres:/var/lib/postgresql
     env_file:
       - ./enviroment/db.env
 
@@ -43,4 +43,16 @@ services:
     depends_on:
       - web
     volumes: 
-      - ./data:/data
+      - ./data/redis:/data
+
+  worker:
+    container_name: cards-worker
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile.celery
+    volumes:
+      - ./backend:/app/
+    env_file:
+      - ./enviroment/web.env
+    depends_on:
+      - redis

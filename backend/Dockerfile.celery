@@ -1,0 +1,10 @@
+FROM python:3.8
+
+WORKDIR /app/
+COPY . .
+
+RUN pip install poetry
+RUN poetry install
+
+RUN chmod +x ./entrypoint-celery.sh
+ENTRYPOINT ./entrypoint-celery.sh

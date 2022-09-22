@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "gamecore",
     "users",
     "gamesocket",
+    "tasks",
 ]
 
 MIDDLEWARE = [
@@ -154,6 +155,8 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
+
+CELERY_BROKER_URL = 'redis://redis:6379/'
 
 ROOM_WAIT_TIME: int = 120
 MIN_ROOM_PLAYERS: int = 3
