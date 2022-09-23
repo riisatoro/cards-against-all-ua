@@ -7,8 +7,6 @@ import WebsocketProvider from './context/websocketContext';
 import App from './components/App';
 import store from './store';
 
-import './styles/index.css';
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

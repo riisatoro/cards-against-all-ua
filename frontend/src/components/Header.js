@@ -27,7 +27,7 @@ function Header() {
   }
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid text-end">
       <p>Welcome, {username}</p>
     </div>
   )

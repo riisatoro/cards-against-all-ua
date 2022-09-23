@@ -1,0 +1,19 @@
+.card-question,
+.card-answer {
+    width: 150px;
+    height: 180px;
+    border: 2px solid;
+    border-radius: 20px;    
+}
+
+.card-question {
+    color: white;
+    border-color: white;
+    background-color: black;
+}
+
+.card-answer {
+    color: black;
+    border-color: black;
+    background-color: white;
+}
