@@ -50,8 +50,13 @@ class GameEngine:
 
     @staticmethod
     def select_question_card(room: RoomModel):
-        
-        return room
+        current_question_id = room.question_card.id if room.question_card else None
+        new_question = choice(
+            CardModel.objects.filter(card_type=CardModel.QUESTION).exclude(
+                id=current_question_id
+            )
+        )
+        room.question_card = new_question
 
     @staticmethod
     def try_start_game(room: RoomModel):
