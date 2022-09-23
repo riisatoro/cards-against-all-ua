@@ -27,18 +27,18 @@ class Model(Base):
 
 
 class CardModel(Model):
-    QUESTION = 'question'
-    ANSWER = 'answer'
+    QUESTION = "question"
+    ANSWER = "answer"
     CARD_TYPES = (
-        (ANSWER, 'Answer'),
-        (QUESTION, 'Question'),
+        (ANSWER, "Answer"),
+        (QUESTION, "Question"),
     )
 
     text = CharField(max_length=255)
     card_type = CharField(max_length=100, choices=CARD_TYPES)
 
     def __str__(self):
-        return f'[{self.id}] {self.card_type}: {self.text}'
+        return f"[{self.id}] {self.card_type}: {self.text}"
 
 
 class RoomModel(Model):
@@ -49,17 +49,12 @@ class RoomModel(Model):
     round_number = PositiveIntegerField(default=0)
     round_end_time = DateTimeField(auto_now_add=True)
 
-    leader = ForeignKey(to=User, on_delete=SET_NULL, null=True, related_name='leader')
-    users = ManyToManyField(to=User, through='UserRoomModel', related_name='users')
+    leader = ForeignKey(to=User, on_delete=SET_NULL, null=True, related_name="leader")
+    users = ManyToManyField(to=User, related_name="users")
 
-    question_card = ForeignKey(to='CardModel', on_delete=SET_NULL, null=True, related_name='question_card')
-    best_answer_card = ForeignKey(to='CardModel', on_delete=SET_NULL, null=True, related_name='best_answer_card')
-
-
-class UserRoomModel(Model):
-    room = ForeignKey(to='RoomModel', on_delete=CASCADE)
-    user = ForeignKey(to=User, on_delete=CASCADE)
-
-    score = PositiveIntegerField(default=0)
-    answer = ManyToManyField(to='CardModel', related_name='answer')
-    cards = ManyToManyField(to='CardModel', related_name='cards')
+    question_card = ForeignKey(
+        to="CardModel", on_delete=SET_NULL, null=True, related_name="question_card"
+    )
+    best_answer_card = ForeignKey(
+        to="CardModel", on_delete=SET_NULL, null=True, related_name="best_answer_card"
+    )

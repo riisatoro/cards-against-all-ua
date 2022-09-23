@@ -3,7 +3,6 @@ from django.contrib import admin
 from gamecore.models import (
     CardModel,
     RoomModel,
-    UserRoomModel,
 )
 
 
@@ -21,9 +20,3 @@ class RoomModelAdmin(admin.ModelAdmin):
         'leader',
         'question_card', 'best_answer_card',
     )
-
-
-@admin.register(UserRoomModel)
-class UserRoomModelAdmin(admin.ModelAdmin):
-    list_display = ('room', 'user', 'score',)
-    filter_horizontal = ('answer', 'cards',)

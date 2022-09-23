@@ -4,11 +4,10 @@ from rest_framework.serializers import (
     Serializer,
 )
 
-from authentication.models import User
 from gamecore.models import (
     CardModel,
     RoomModel,
-    UserRoomModel,
+    User,
 )
 from users.serializers import UserSerializer
 
@@ -38,18 +37,17 @@ class CardSerializer(ModelSerializer):
 class UserRoomSerializer(ModelSerializer):
     answer = CardSerializer(many=True)
     cards = CardSerializer(many=True)
-    user = UserSerializer()
 
     class Meta:
-        model = UserRoomModel
-        fields = ("user", "score", "answer", "cards")
+        model = User
+        fields = ("username", "score", "answer", "cards",)
 
 
 class RoomSerializer(ModelSerializer):
     best_answer_card = CardSerializer()
     question_card = CardSerializer()
     leader = UserRoomSerializer()
-    users = UserRoomSerializer(source="userroommodel_set", many=True)
+    users = UserRoomSerializer(many=True)
 
     class Meta:
         model = RoomModel

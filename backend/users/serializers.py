@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer, CharField
 from rest_framework.validators import ValidationError
 
-from authentication.models import User
+from gamecore.models import User
 
 
 class CreateUserSerializer(ModelSerializer):

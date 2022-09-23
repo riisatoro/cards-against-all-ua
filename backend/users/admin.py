@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from authentication.models import User
+from gamecore.models import User
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):

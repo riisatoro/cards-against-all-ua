@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 from django.test import TestCase
 from django.urls import reverse
 
-from authentication.models import User
+from gamecore.models import User
 from gamecore.models import RoomModel
 from tests.api_client import make_request
 

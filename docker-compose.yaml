@@ -16,6 +16,8 @@ services:
   db:
     image: postgres
     container_name: cards-db
+    ports:
+      - 5432:5432
     volumes:
       - ./data/postgres:/var/lib/postgresql
     env_file:
