@@ -10,21 +10,19 @@ const Header = () => {
 
   const {
     roomID,
-    currentGame
+    roomData
   } = useSelector((state) => state.game);
 
   return (
     <div className="d-flex align-items-center justify-content-evenly">
       {!roomID && <Navigate to={Navigation.profile} />}
 
-      {!currentGame?.is_started && (
+      {!roomData?.is_started && (
         <p className="mb-0">Waiting for other players to join...</p>
       )}
-
-      {currentGame?.is_started && (
-        <div>
-          <p><small>Current leader: {currentGame?.leader?.username}</small></p>
-        </div>
+      
+      {roomData?.is_started && !roomData?.question_card?.id && (
+        <p className="mb-0">Game will be starting soon...</p>
       )}
 
       <div className="text-end"><RoomLinkButton {...{ roomID }} /></div>
