@@ -9,9 +9,9 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ["username"]
 
     cards = ManyToManyField(
-        to="gamecore.CardModel", null=True, blank=True, related_name="cards"
+        to="gamecore.CardModel", blank=True, related_name="cards"
     )
     answer_cards = ManyToManyField(
-        to="gamecore.CardModel", null=True, blank=True, related_name="answers"
+        to="gamecore.CardModel", blank=True, related_name="answers"
     )
     score = IntegerField(default=0)
