@@ -1,7 +1,5 @@
 from rest_framework.serializers import (
-    CharField,
     ModelSerializer,
-    Serializer,
 )
 
 from gamecore.models import (
@@ -9,9 +7,6 @@ from gamecore.models import (
     RoomModel,
     User,
 )
-
-
-
 
 
 class CardSerializer(ModelSerializer):
@@ -47,6 +42,9 @@ class RoomSerializer(ModelSerializer):
     users = PlayerDataSerializer(many=True, read_only=True)
     leader = PlayerSerializer()
 
+    question_card = CardSerializer()
+    best_answer_card = CardSerializer()
+
     class Meta:
         model = RoomModel
         fields = (
@@ -57,4 +55,6 @@ class RoomSerializer(ModelSerializer):
             "round_end_time",
             "leader",
             "users",
+            "question_card",
+            "best_answer_card",
         )
