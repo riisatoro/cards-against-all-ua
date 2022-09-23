@@ -49,12 +49,15 @@ class RoomModel(Model):
     round_number = PositiveIntegerField(default=0)
     round_end_time = DateTimeField(auto_now_add=True)
 
-    leader = ForeignKey(to=User, on_delete=SET_NULL, null=True, related_name="leader")
+    leader = ForeignKey(to=User, on_delete=SET_NULL, null=True, blank=True, related_name="leader")
     users = ManyToManyField(to=User, related_name="users")
 
     question_card = ForeignKey(
-        to="CardModel", on_delete=SET_NULL, null=True, related_name="question_card"
+        to="CardModel", on_delete=SET_NULL, null=True, blank=True, related_name="question_card"
     )
     best_answer_card = ForeignKey(
-        to="CardModel", on_delete=SET_NULL, null=True, related_name="best_answer_card"
+        to="CardModel", on_delete=SET_NULL, null=True, blank=True, related_name="best_answer_card"
     )
+
+    class Meta:
+        ordering = ('-is_started', )

@@ -9,20 +9,9 @@ from gamecore.models import (
     RoomModel,
     User,
 )
-from users.serializers import UserSerializer
 
 
-class DefaultResponseSerializer(Serializer):
-    detail = CharField()
 
-    class Meta:
-        fields = ("detail",)
-
-
-class CreateRoomSerializer(ModelSerializer):
-    class Meta:
-        model = RoomModel
-        fields = ("is_private",)
 
 
 class CardSerializer(ModelSerializer):
@@ -34,36 +23,38 @@ class CardSerializer(ModelSerializer):
         )
 
 
-class UserRoomSerializer(ModelSerializer):
-    answer = CardSerializer(many=True)
-    cards = CardSerializer(many=True)
+class PlayerSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("username",)
+
+
+class PlayerDataSerializer(ModelSerializer):
+    cards = CardSerializer(many=True, read_only=True)
+    answer_cards = CardSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = ("username", "score", "answer", "cards",)
+        fields = (
+            "username",
+            "score",
+            "cards",
+            "answer_cards",
+        )
 
 
 class RoomSerializer(ModelSerializer):
-    best_answer_card = CardSerializer()
-    question_card = CardSerializer()
-    leader = UserRoomSerializer()
-    users = UserRoomSerializer(many=True)
+    users = PlayerDataSerializer(many=True, read_only=True)
+    leader = PlayerSerializer()
 
     class Meta:
         model = RoomModel
         fields = (
             "id",
-            "is_private",
             "is_started",
             "is_ended",
             "round_number",
             "round_end_time",
             "leader",
-            "question_card",
-            "best_answer_card",
             "users",
         )
-
-
-class JoinRoomSerializer(Serializer):
-    room_uuid = CharField(max_length=500, required=False)

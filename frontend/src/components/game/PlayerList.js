@@ -10,7 +10,7 @@ const PlayerList = () => {
       <div>
         {
           users?.map((item) => (
-            <p key={item.user.username}>{item.user.username === username ? "You: " : "Player: "} {item.user.username} | {item.score  }</p>
+            <p key={item.username}>{item.username === username ? "You: " : "Player: "} {item.username} | {item.score  }</p>
           ))
         }
       </div>

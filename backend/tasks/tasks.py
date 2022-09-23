@@ -2,13 +2,10 @@ from django.conf import settings
 from celery import shared_task
 
 from gamecore.engine import GameEngine
-from gamecore.models import RoomModel
+from gamecore.queries import get_room
 from gamecore.serializers import RoomSerializer
 from gamesocket.notifications import notify_room_members
 
-
-def get_room(room_id: str):
-    return RoomModel.objects.get(id=room_id)
 
 def send_updated_room(room_id, room):
     data = RoomSerializer(room).data

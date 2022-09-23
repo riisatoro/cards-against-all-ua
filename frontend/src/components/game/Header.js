@@ -23,7 +23,7 @@ const Header = () => {
 
       {currentGame?.is_started && (
         <div>
-          <p><small>Current leader: {currentGame?.leader?.user?.username}</small></p>
+          <p><small>Current leader: {currentGame?.leader?.username}</small></p>
         </div>
       )}
 
