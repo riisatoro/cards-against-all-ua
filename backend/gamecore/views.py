@@ -70,9 +70,10 @@ class JoinRoomView(APIView):
         if not room.is_started and room.users.count() >= settings.MIN_ROOM_PLAYERS:
             room.is_started=True
             room.save()
-            # start_new_round.apply_async(
-            #     (room.id,), countdown=settings.FIRST_ROUND_COUNTDOWN
-            # )
+
+            start_new_round.apply_async(
+                (str(room.id),), countdown=settings.FIRST_ROUND_COUNTDOWN
+            )
 
         room_data = RoomSerializer(room).data
         notify_room_members(str(room.id), room_data)

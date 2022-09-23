@@ -36,10 +36,10 @@ def wait_players_select_answers(room_id):
 def start_new_round(room_id: str):
     room = get_room(room_id)
     GameEngine.start_new_round(room)
-    room.save()
 
     send_updated_room(room_id, room)
 
-    wait_players_select_answers.apply_async(
-        (room_id,), countdown=settings.ROOM_WAIT_TIME
-    )
+    print('--- START NEW ROUND ---')
+    # wait_players_select_answers.apply_async(
+    #     (room_id,), countdown=settings.ROOM_WAIT_TIME
+    # )

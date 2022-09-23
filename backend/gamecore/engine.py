@@ -16,39 +16,6 @@ class GameEngine:
         room.leader = choice(players)
 
     @staticmethod
-    def distribute_answer_cards(room: RoomModel):
-        distributed_cards = room.userroommodel_set.values_list(
-            "cards", flat=True
-        ).exclude(cards__isnull=True)
-
-        available_cards = list(
-            CardModel.objects.filter(card_type=CardModel.ANSWER).exclude(
-                id__in=distributed_cards
-            )
-        )
-        shuffle(available_cards)
-
-        distributed_amount = 0
-        for user_room_data in room.userroommodel_set.all():
-            cards_amount_to_distribute = (
-                settings.DEFAULT_ANSWERS_AMOUNT
-                - user_room_data.cards.count()  # if user has 0 cards
-                + user_room_data.answer.count()
-            )
-
-            user_room_data.cards.add(
-                *available_cards[
-                    distributed_amount : distributed_amount + cards_amount_to_distribute
-                ]
-            )
-
-            if answers := list(user_room_data.answer.all()):
-                user_room_data.cards.remove(*answers)
-
-            user_room_data.answer.clear()
-            distributed_amount += cards_amount_to_distribute
-
-    @staticmethod
     def select_question_card(room: RoomModel):
         current_question_id = room.question_card.id if room.question_card else None
         new_question = choice(
@@ -59,18 +26,46 @@ class GameEngine:
         room.question_card = new_question
 
     @staticmethod
-    def try_start_game(room: RoomModel):
-        if room.is_started:
-            return False
+    def distribute_answer_cards(room: RoomModel):
+        distributed_cards = room.users.values_list("cards", flat=True).exclude(
+            cards__isnull=True
+        )
 
-        if room.users.count() >= settings.MIN_ROOM_PLAYERS:
-            room.is_started = True
+        available_cards = list(
+            CardModel.objects.filter(card_type=CardModel.ANSWER).exclude(
+                id__in=distributed_cards
+            )
+        )
+        shuffle(available_cards)
 
-        room.save()
-        return True
+        distributed_amount = 0
+        for user_cards_data in room.users.all():
+            cards_amount_to_distribute = (
+                settings.DEFAULT_ANSWERS_AMOUNT
+                - user_cards_data.cards.count()  # if user has 0 cards
+                + user_cards_data.answer_cards.count()
+            )
+
+            user_cards_data.cards.add(
+                *available_cards[
+                    distributed_amount : distributed_amount + cards_amount_to_distribute
+                ]
+            )
+
+            if answers := list(user_cards_data.answer_cards.all()):
+                user_cards_data.cards.remove(*answers)
+
+            user_cards_data.answer_cards.clear()
+            distributed_amount += cards_amount_to_distribute
+
+    @staticmethod
+    def update_room_round_info(room: RoomModel):
+        room.round_number += 1
 
     @staticmethod
     def start_new_round(room: RoomModel):
         GameEngine.select_room_leader(room)
         GameEngine.select_question_card(room)
         GameEngine.distribute_answer_cards(room)
+        GameEngine.update_room_round_info(room)
+        room.save()
