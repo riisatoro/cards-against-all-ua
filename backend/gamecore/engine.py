@@ -68,3 +68,9 @@ class GameEngine:
 
         room.save()
         return True
+
+    @staticmethod
+    def start_new_round(room: RoomModel):
+        GameEngine.select_room_leader(room)
+        GameEngine.select_question_card(room)
+        GameEngine.distribute_answer_cards(room)

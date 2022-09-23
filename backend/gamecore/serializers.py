@@ -32,7 +32,6 @@ class CardSerializer(ModelSerializer):
         fields = (
             "id",
             "text",
-            "card_type",
         )
 
 

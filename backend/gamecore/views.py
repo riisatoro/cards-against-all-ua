@@ -13,8 +13,6 @@ from gamecore.serializers import (
     DefaultResponseSerializer,
     JoinRoomSerializer,
     RoomSerializer,
-    UserRoomSerializer,
-
 )
 from gamesocket.notifications import notify_room_members
 from tasks.tasks import start_new_round
@@ -112,9 +110,11 @@ class UserJoinRoomView(APIView):
                 },
                 status=422,
             )
-        
+
         if GameEngine.try_start_game(room):
-            start_new_round.apply_async((room.id,), countdown=settings.FIRST_ROUND_COUNTDOWN)
+            start_new_round.apply_async(
+                (room.id,), countdown=settings.FIRST_ROUND_COUNTDOWN
+            )
 
         group = str(room.id)
         data = RoomSerializer(room).data
@@ -143,7 +143,7 @@ class UserLeaveRoomView(APIView):
 
         user_room = user_room.first()
         user_room.users.remove(request.user)
-        
+
         if not user_room.users.count():
             user_room.delete()
         else:
