@@ -21,6 +21,7 @@ const gameReducer = createSlice({
         },
         // [fetchAvailableGames.rejected]: (state, action) => { },
         [createUserRoom.fulfilled]: (state, action) => {
+            state.roomID = action.payload.id;
             state.roomData = action.payload;
         },
         // [createUserRoom.rejected]: (state, action) => { },

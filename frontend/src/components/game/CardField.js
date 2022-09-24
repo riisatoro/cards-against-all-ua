@@ -11,7 +11,7 @@ const CardField = () => {
   return (
     <div className="container my-3">
       <div className="d-flex justify-content-between">
-        <Card {...questionCard} />
+        {questionCard?.id && <Card {...questionCard} />}
         {answerCards?.map((card) => <Card {...card} key={card.id} />)}
       </div>
       <div className="d-flex my-3 flex-wrap justify-content-between">

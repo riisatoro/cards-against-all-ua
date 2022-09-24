@@ -65,6 +65,8 @@ class JoinRoomView(APIView):
             return Response(ViewResponses.already_in_game, 200)
 
         room.users.add(request.user)
+        request.user.cards.clear()
+        request.user.answer_cards.clear()
 
         if (
             room.room_state == GameState.WAIT_FOR_NEW_PLAYERS
@@ -100,6 +102,8 @@ class LeaveRoomView(APIView):
             return Response(ViewResponses.user_not_in_room, status=422)
 
         user_room.users.remove(request.user)
+        request.user.cards.clear()
+        request.user.answer_cards.clear()
 
         if not user_room.users.count():
             user_room.delete()
