@@ -46,6 +46,7 @@ class CardModel(Model):
 
     text = CharField(max_length=255)
     card_type = CharField(max_length=100, choices=CARD_TYPES)
+    answers_amount = IntegerField(default=1)
 
     def __str__(self):
         return f"[{self.id}] {self.card_type}: {self.text}"
@@ -72,12 +73,12 @@ class RoomModel(Model):
         blank=True,
         related_name="question_card",
     )
-    best_answer_card = ForeignKey(
-        to="CardModel",
+    round_winner = ForeignKey(
+        to="authentication.User",
         on_delete=SET_NULL,
         null=True,
         blank=True,
-        related_name="best_answer_card",
+        related_name="round_winner",
     )
 
     class Meta:

@@ -1,9 +1,14 @@
+import { useDispatch } from 'react-redux';
+import { selectAnswerCard } from '../../store/reducers/apiRequests';
+
 import '../../styles/card.css';
 
-const Card = ({ id, text, card_type: cardType, className }) => {
-  
+const Card = ({ id, text, card_type: cardType, className, allowRequest }) => {
+
+  const dispatch = useDispatch();
   const selectCard = () => {
-    console.log('card selected');
+    console.log(allowRequest)
+    if (allowRequest) dispatch(selectAnswerCard({ card_id: id }));
   }
 
   return (

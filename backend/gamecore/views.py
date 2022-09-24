@@ -115,19 +115,21 @@ class LeaveRoomView(APIView):
 
 @extend_schema(tags=[VIEW_TAG])
 class SelectAnswerCards(APIView):
-    @extend_schema
+
     def post(self, request):
         room = get_user_room(request.user)
-        if not room or room.room_state is not GameState.WAIT_FOR_USERS_ANSWER:
+        if not room or room.room_state != GameState.WAIT_FOR_USERS_ANSWER:
             return Response(ViewResponses.answer_cards_disabled, 422)
-        
+
         if request.user.answer_cards.count() >= 1:
             return Response(ViewResponses.answer_cards_full, 422)
-        
-        card = get_card(request.POST.get('card_id'))
-        request.user.answer_cards.set(card)
-        
-        return Response(RoomSerializer(room).data, 201)
+
+        card = get_card(request.data.get("card_id"))
+        request.user.answer_cards.set([card])
+
+        room_data = RoomSerializer(room).data
+        notify_room_members(str(room.id), room_data)
+        return Response(room_data, 201)
 
 
 class SelectBestAnswer(APIView):

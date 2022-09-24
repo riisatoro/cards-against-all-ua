@@ -16,6 +16,7 @@ class CardSerializer(ModelSerializer):
             "id",
             "text",
             "card_type",
+            "answers_amount"
         )
 
 
@@ -44,7 +45,7 @@ class RoomSerializer(ModelSerializer):
     leader = PlayerSerializer()
 
     question_card = CardSerializer()
-    best_answer_card = CardSerializer()
+    round_winner = PlayerSerializer()
 
     class Meta:
         model = RoomModel
@@ -56,5 +57,5 @@ class RoomSerializer(ModelSerializer):
             "leader",
             "users",
             "question_card",
-            "best_answer_card",
+            "round_winner",
         )
