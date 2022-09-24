@@ -50,8 +50,7 @@ class RoomSerializer(ModelSerializer):
         model = RoomModel
         fields = (
             "id",
-            "is_started",
-            "is_ended",
+            "room_state",
             "round_number",
             "round_end_time",
             "leader",

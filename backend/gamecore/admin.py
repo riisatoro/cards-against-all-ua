@@ -18,10 +18,10 @@ class CardModelAdmin(admin.ModelAdmin):
 @admin.register(RoomModel)
 class RoomModelAdmin(admin.ModelAdmin):
     list_display = (
-        "is_started",
-        "is_ended",
         "is_private",
+        "room_state",
         "round_number",
         "round_end_time",
     )
     filter_horizontal = ("users",)
+    list_filter = ("room_state",)

@@ -17,11 +17,11 @@ const Header = () => {
     <div className="d-flex align-items-center justify-content-evenly">
       {!roomID && <Navigate to={Navigation.profile} />}
 
-      {!roomData?.is_started && (
+      {!roomData?.room_state && (
         <p className="mb-0">Waiting for other players to join...</p>
       )}
       
-      {roomData?.is_started && !roomData?.question_card?.id && (
+      {roomData?.room_state && !roomData?.question_card?.id && (
         <p className="mb-0">Game will be starting soon...</p>
       )}
 

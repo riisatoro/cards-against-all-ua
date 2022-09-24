@@ -3,7 +3,7 @@ from random import choice
 from django.conf import settings
 from django.db.models import Count
 
-from gamecore.models import RoomModel
+from gamecore.models import RoomModel, GameState
 
 
 def get_room(room_id: str):
@@ -11,7 +11,7 @@ def get_room(room_id: str):
 
 
 def get_user_room(user):
-    return RoomModel.objects.filter(users__in=[user], is_ended=False).first()
+    return RoomModel.objects.filter(users__in=[user]).exclude(room_state=GameState.GAME_ENDED).first()
 
 
 def create_room(user, is_private=False):
@@ -25,11 +25,11 @@ def get_free_room(room_id=None):
         RoomModel.objects.annotate(user_amount=Count("users"))
         .filter(
             **{
-                "is_ended": False,
                 "user_amount__lt": settings.MAX_ROOM_PLAYER,
                 "is_private": bool(room_id),
             }
         )
+        .exclude(room_state=GameState.GAME_ENDED)
         .order_by("-user_amount")
     )
 

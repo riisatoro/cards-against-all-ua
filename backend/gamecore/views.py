@@ -4,9 +4,8 @@ from django.conf import settings
 from drf_spectacular.utils import extend_schema
 from rest_framework.views import APIView, Response
 from rest_framework.permissions import IsAuthenticated
-from gamecore.engine import GameEngine
 
-
+from gamecore.models import GameState
 from gamecore.queries import get_user_room, create_room, get_free_room
 from gamecore.serializers import (
     RoomSerializer,
@@ -67,8 +66,11 @@ class JoinRoomView(APIView):
 
         room.users.add(request.user)
 
-        if not room.is_started and room.users.count() >= settings.MIN_ROOM_PLAYERS:
-            room.is_started=True
+        if (
+            room.room_state == GameState.WAIT_FOR_NEW_PLAYERS
+            and room.users.count() >= settings.MIN_ROOM_PLAYERS
+        ):
+            room.room_state = GameState.WAIT_FOR_NEW_ROUND
             room.save()
 
             start_new_round.apply_async(
@@ -105,3 +107,15 @@ class LeaveRoomView(APIView):
             notify_room_members(str(user_room.id), RoomSerializer(user_room).data)
 
         return Response(ViewResponses.user_left_successfully, status=200)
+
+
+@extend_schema(tags=[VIEW_TAG])
+class SelectAnswerCards(APIView):
+    @extend_schema
+    def post(self, request):
+        room = get_user_room(request.user)
+        return Response({}, 200)
+
+
+class SelectBestAnswer(APIView):
+    ...

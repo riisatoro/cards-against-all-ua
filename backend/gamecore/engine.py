@@ -1,7 +1,7 @@
 from random import choice, shuffle
 from django.conf import settings
 
-from gamecore.models import RoomModel, CardModel
+from gamecore.models import RoomModel, CardModel, GameState
 
 
 class GameEngine:
@@ -68,4 +68,5 @@ class GameEngine:
         GameEngine.select_question_card(room)
         GameEngine.distribute_answer_cards(room)
         GameEngine.update_room_round_info(room)
+        room.room_state = GameState.WAIT_FOR_USERS_ANSWER
         room.save()

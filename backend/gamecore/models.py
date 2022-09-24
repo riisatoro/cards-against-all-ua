@@ -5,11 +5,13 @@ from django.db.models import (
     CASCADE,
     CharField,
     DateTimeField,
+    IntegerField,
     PositiveIntegerField,
     ForeignKey,
     ManyToManyField,
     SET_NULL,
     UUIDField,
+    IntegerChoices,
 )
 from django.db.models import Model as Base
 
@@ -24,6 +26,14 @@ class Model(Base):
 
     class Meta:
         abstract = True
+
+
+class GameState(IntegerChoices):
+    WAIT_FOR_NEW_PLAYERS = (0, "Wait for new players")
+    WAIT_FOR_NEW_ROUND = (1, "Wait for new round")
+    WAIT_FOR_USERS_ANSWER = (2, "Wait for users answer")
+    WAIT_FOR_LEADER_SELECT = (3, "Wait for leader select")
+    GAME_ENDED = (4, "Game finished")
 
 
 class CardModel(Model):
@@ -42,22 +52,33 @@ class CardModel(Model):
 
 
 class RoomModel(Model):
-    is_started = BooleanField(default=False)
-    is_ended = BooleanField(default=False)
+    room_state = IntegerField(
+        default=GameState.WAIT_FOR_NEW_PLAYERS, choices=GameState.choices
+    )
     is_private = BooleanField(default=False)
 
     round_number = PositiveIntegerField(default=0)
     round_end_time = DateTimeField(auto_now_add=True)
 
-    leader = ForeignKey(to=User, on_delete=SET_NULL, null=True, blank=True, related_name="leader")
+    leader = ForeignKey(
+        to=User, on_delete=SET_NULL, null=True, blank=True, related_name="leader"
+    )
     users = ManyToManyField(to=User, related_name="users")
 
     question_card = ForeignKey(
-        to="CardModel", on_delete=SET_NULL, null=True, blank=True, related_name="question_card"
+        to="CardModel",
+        on_delete=SET_NULL,
+        null=True,
+        blank=True,
+        related_name="question_card",
     )
     best_answer_card = ForeignKey(
-        to="CardModel", on_delete=SET_NULL, null=True, blank=True, related_name="best_answer_card"
+        to="CardModel",
+        on_delete=SET_NULL,
+        null=True,
+        blank=True,
+        related_name="best_answer_card",
     )
 
     class Meta:
-        ordering = ('-is_started', )
+        ordering = ("room_state",)
