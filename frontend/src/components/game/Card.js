@@ -7,7 +7,6 @@ const Card = ({ id, text, card_type: cardType, className, allowRequest }) => {
 
   const dispatch = useDispatch();
   const selectCard = () => {
-    console.log(allowRequest)
     if (allowRequest) dispatch(selectAnswerCard({ card_id: id }));
   }
 
