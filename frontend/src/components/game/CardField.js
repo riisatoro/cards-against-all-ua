@@ -4,7 +4,7 @@ import Card from './Card';
 const CardField = () => {
   const { username } = useSelector(state => state.auth);
   const { users } = useSelector(state => state.game.roomData);
-  const { answer_cards: answerCards, cards } = users.filter((user) => user.username === username)[0];
+  const { answer_cards: answerCards, cards } = users?.filter((user) => user.username === username)[0] || {};
 
   const { question_card: questionCard } = useSelector(state => state.game.roomData);
 
