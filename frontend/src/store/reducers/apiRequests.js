@@ -7,6 +7,7 @@ import {
   GET_OR_CREATE_USER_ROOM,
   USER_LEAVE_ROOM,
   JOIN_USER_ROOM_URL,
+  SELECT_ANSWER_CARD_URL,
 } from '../../constants';
 
 
@@ -72,6 +73,16 @@ export const joinUserRoom = createAsyncThunk(
     const { auth: { accessToken } } = getState();
     const apiInstance = axios.create({ headers: { "Authorization": `Bearer ${accessToken}` } })
     const response = await apiInstance.post(JOIN_USER_ROOM_URL, payload);
+    return await response.data;
+  }
+)
+
+export const selectAnswerCard = createAsyncThunk(
+  'game/selectAnswerCard',
+  async (payload, { getState }) => {
+    const { auth: { accessToken } } = getState();
+    const apiInstance = axios.create({ headers: { "Authorization": `Bearer ${accessToken}` } })
+    const response = await apiInstance.post(SELECT_ANSWER_CARD_URL, payload);
     return await response.data;
   }
 )

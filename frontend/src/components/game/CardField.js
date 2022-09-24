@@ -10,12 +10,15 @@ const CardField = () => {
 
   return (
     <div className="container my-3">
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-evenly align-items-center">
         {questionCard?.id && <Card {...questionCard} />}
-        {answerCards?.map((card) => <Card {...card} key={card.id} />)}
+        <div>
+          {answerCards[0]?.id && <p className="h2">&amp;</p>}
+        </div>
+        {answerCards?.map((card) => <Card {...{ ...card, className: 'card-selected' }} key={card.id} />)}
       </div>
       <div className="d-flex my-3 flex-wrap justify-content-between">
-        {cards?.map((card) => <Card {...card} key={card.id}/>)}
+        {cards?.map((card) => <Card {...card} key={card.id} />)}
       </div>
     </div>
   )

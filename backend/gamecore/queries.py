@@ -3,14 +3,14 @@ from random import choice
 from django.conf import settings
 from django.db.models import Count
 
-from gamecore.models import RoomModel, GameState
+from gamecore.models import CardModel, RoomModel, GameState
 
 
 def get_room(room_id: str):
     return RoomModel.objects.get(id=room_id)
 
 
-def get_user_room(user):
+def get_user_room(user) -> RoomModel:
     return RoomModel.objects.filter(users__in=[user]).exclude(room_state=GameState.GAME_ENDED).first()
 
 
@@ -37,3 +37,6 @@ def get_free_room(room_id=None):
         room = room.filter(id=room_id)
 
     return room.first()
+
+def get_card(card_id) -> CardModel:
+    return CardModel.objects.filter(id=card_id).first()
