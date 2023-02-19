@@ -5,6 +5,3 @@ COPY . .
 
 RUN pip install poetry
 RUN poetry install
-
-RUN chmod +x ./entrypoint-celery.sh
-ENTRYPOINT ./entrypoint-celery.sh

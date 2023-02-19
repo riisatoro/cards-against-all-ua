@@ -4,13 +4,13 @@ import Card from './Card';
 const CardField = () => {
   const { username } = useSelector(state => state.auth);
   const { users, leader } = useSelector(state => state.game.roomData);
-  const isLeader = leader.username === username;
+  const isLeader = leader?.username === username;
 
   const { answer_cards: answerCards, cards } = users?.filter((user) => user.username === username)[0] || {};
   const suggestedCards = users?.filter((user) => user.username !== username).map((item) => item.answer_cards)
 
   const { question_card: questionCard } = useSelector(state => state.game.roomData);
-  const allowRequest = (questionCard.answers_amount - (answerCards?.length || 0)) > 0;
+  const allowRequest = (questionCard?.answers_amount - (answerCards?.length || 0)) > 0;
 
   const selectBestAnswer = () => {  };
 

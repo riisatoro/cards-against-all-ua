@@ -10,6 +10,7 @@ services:
       - db
     env_file:
       - ./enviroment/web.env
+      - ./enviroment/db.env
     ports:
       - 8000:8000
 
@@ -52,9 +53,27 @@ services:
     build:
       context: ./backend
       dockerfile: ./Dockerfile.celery
+    command: poetry run celery -A core worker -E
     volumes:
       - ./backend:/app/
     env_file:
       - ./enviroment/web.env
+      - ./enviroment/db.env
     depends_on:
       - redis
+
+  flower:
+    container_name: flower
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile.celery
+    command: poetry run celery -A core flower
+    volumes:
+      - ./backend:/app/
+    env_file:
+      - ./enviroment/web.env
+      - ./enviroment/db.env
+    depends_on:
+      - redis
+    ports:
+      - 5555:5555
