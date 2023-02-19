@@ -19,7 +19,7 @@ const CardField = () => {
       <div className="d-flex justify-content-evenly align-items-center">
         {questionCard?.id && <Card {...{ ...questionCard, allowRequest: false }} />}
         <div>
-          {!isLeader && answerCards[0]?.id && <p className="h2">&amp;</p>}
+          {!isLeader && answerCards?.length && answerCards[0]?.id && <p className="h2">&amp;</p>}
         </div>
         {!isLeader && answerCards?.map((card) => <Card {...{ ...card, className: 'card-selected', allowRequest: false }} key={card.id} />)}
       </div>
